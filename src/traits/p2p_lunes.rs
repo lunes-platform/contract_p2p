@@ -20,7 +20,7 @@ pub trait P2pLunesImplLunes {
     #[ink(message)]
     fn confirm_sell(&mut self, id: u64) -> Result<(), ()>;
     #[ink(message)]
-    fn conflict_sele(&mut self, id: u64, confirm_payment: bool) -> Result<(), ()>;
+    fn transfer_conflict_sele(&mut self, id: u64, confirm_payment: bool) -> Result<(), ()>;
     #[ink(message)]
     fn open_conflict_seller(&mut self, id: u64) -> Result<(), ()>;
     #[ink(message)]
