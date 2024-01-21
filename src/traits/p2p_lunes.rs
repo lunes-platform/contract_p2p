@@ -41,4 +41,6 @@ pub trait P2pLunesImplLunes {
     fn update_expire_day(&mut self, date_expire:u64) -> Result<(), ()>;
     #[ink(message)]
     fn update_min_sales(&mut self, min_sales:Balance) -> Result<(), ()>;
+    #[ink(message)]
+    fn info_contract(&mut self)-> Result<(), ()>;
 }

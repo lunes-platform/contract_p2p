@@ -42,6 +42,17 @@ pub struct BuyBook {
     pub confirmed: bool,
     pub conflict: bool,
 }
+
+#[derive(Debug, PartialEq, Clone, Eq, scale::Encode, scale::Decode)]
+#[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
+pub struct InfoContract {
+    pub fee_p2p: u64,
+    pub days_expire: u64,
+    pub next_buy_id: u64,
+    pub next_order_id: u64,
+    pub min_sales: Balance,
+}
+
 #[derive(Debug, PartialEq, Eq, scale::Encode, scale::Decode)]
 #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
 pub enum LunesError {

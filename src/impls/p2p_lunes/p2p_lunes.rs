@@ -1,4 +1,4 @@
-use crate::impls::p2p_lunes::data::{ Data, BuyBook, OrdemBook, LunesError };
+use crate::impls::p2p_lunes::data::{ Data, BuyBook, OrdemBook,InfoContract, LunesError };
 use openbrush::{
     modifiers,
     traits::{ AccountId, Balance, Storage, String },
@@ -150,7 +150,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             .data::<Data>()
             .buy_books.iter()
             .position(
-                |order| order.id == id && order.conflict == true && order.date_expire > date_block
+                |order| order.id == id && order.conflict == true && order.date_expire <= date_block
             );
         if index.is_none() {
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
@@ -186,7 +186,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             .data::<Data>()
             .buy_books.iter()
             .position(
-                |order| order.id == id && order.sell_owner == caller && order.confirmed == false && order.date_expire > date_block
+                |order| order.id == id && order.sell_owner == caller && order.confirmed == false && order.date_expire <= date_block
             );
         if index.is_none() {
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
@@ -333,4 +333,14 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         self.data::<Data>().min_sales = min_sales;
         Ok(())
     }
+    fn info_contract(&mut self) -> Result<InfoContract, PSP22Error> {        
+        Ok(InfoContract{
+            fee_p2p: self.data::<Data>().fee_p2p,
+            days_expire: self.data::<Data>().days_expire,
+            next_buy_id:self.data::<Data>().next_buy_id,
+            next_order_id:self.data::<Data>().next_order_id,
+            min_sales: self.data::<Data>().min_sales
+        })
+    }
+
 }
