@@ -108,6 +108,7 @@ const BookTradePage = ({...props}:BookTradeProps) => {
                             />
                         </div>
                         <div>
+                        
                             <TextField
                                 label={`Address / Info to payment`}
                                 fullWidth
@@ -116,20 +117,16 @@ const BookTradePage = ({...props}:BookTradeProps) => {
                             />
                         </div>
                         <div>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-amount"
-                                    endAdornment={<InputAdornment position="end">
-                                        <Button>MAX</Button>
-                                    </InputAdornment>}
-                                    label="Amount"
-                                />
-                            </FormControl>
-
+                            <Autocomplete
+                                disablePortal
+                                fullWidth
+                                options={assets.values_type}
+                                renderInput={(params) => <TextField   {...params} label="Amount" />}
+                            />
                         </div>
                         <div>Fee P2P: 3%</div>
                         <div>Fee Network: 0.00144 LUNES</div>
+                        <div>Amount + Fee P2P: 10030 LUNES</div>
                         <div>Time Expire: 7days</div>
                         <div>
                             <Button variant="contained" fullWidth>Create Order</Button>

@@ -38,7 +38,7 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
                         disablePortal
                         fullWidth
                         options={assets.values_type}
-                        renderInput={(params) => <TextField   {...params} label="Price" />}
+                        renderInput={(params) => <TextField   {...params} label="Amount" />}
                     />
                 </div>
                 <div>
