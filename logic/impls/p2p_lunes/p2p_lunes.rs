@@ -20,6 +20,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
     fn create_order(
         &mut self,
         price: Balance,
+        fee:Balance,
         pair: String,
         address_payment: String
     ) -> Result<(), PSP22Error> {
@@ -27,13 +28,12 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         if total_sell <= self.data::<Data>().min_sales {
             return Err(PSP22Error::Custom(LunesError::BadMintValue.as_str()));
         }
-        let feepay = (total_sell * (self.data::<Data>().fee_p2p as u128)) / 100;
         let owner = self.data::<ownable::Data>().owner.get().unwrap().unwrap();
         //Payment fee p2p2
         Self::env()
-            .transfer(owner, feepay)
+            .transfer(owner, fee)
             .map_err(|_| PSP22Error::Custom(LunesError::PaymentFail.as_str()))?;
-        total_sell = total_sell - feepay;
+        total_sell = total_sell - fee;
 
         let date_block = Self::env().block_timestamp();
         let date_expire = date_block + self.data::<Data>().days_expire;
@@ -61,7 +61,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         let index = self
             .data::<Data>()
             .books.iter()
-            .position(|order| order.id == id && order.owner == caller && order.cencel == false);
+            .position(|order| order.id == id && order.owner == caller);
         if index.is_none() {
             return Err(PSP22Error::Custom(LunesError::ErroCancel.as_str()));
         }
@@ -109,6 +109,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             sell_owner: sell_pwner,
             address_payment: address_payment,
             pair: pair,
+            penalty:false,
             confirmed: false,
         });
         if self.data::<Data>().books[index.unwrap()].value <= 0 {
@@ -150,7 +151,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             .data::<Data>()
             .buy_books.iter()
             .position(
-                |order| order.id == id && order.conflict == true && order.date_expire <= date_block
+                |order| order.id == id && order.conflict == true && order.date_expire <= date_block && order.confirmed ==false
             );
         if index.is_none() {
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
@@ -159,6 +160,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         let value_fee = (value_total * (self.data::<Data>().fee_p2p as u128)) / 100;
         let owner_buy: AccountId;
         let owner_p2p = self.data::<ownable::Data>().owner.get().unwrap().unwrap();
+        self.data::<Data>().buy_books[index.unwrap()].confirmed = true;
         if confirm_payment {
             value_total = value_total - value_fee;
             owner_buy = self.data::<Data>().buy_books[index.unwrap()].owner;
@@ -167,12 +169,13 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
                 .map_err(|_| PSP22Error::Custom(LunesError::PaymentFail.as_str()))?;
         } else {
             owner_buy = self.data::<Data>().buy_books[index.unwrap()].sell_owner;
+            self.data::<Data>().buy_books[index.unwrap()].penalty = true;
         }
 
         Self::env()
             .transfer(owner_buy, value_total)
             .map_err(|_| PSP22Error::Custom(LunesError::PaymentFail.as_str()))?;
-        self.data::<Data>().buy_books.remove(index.unwrap());
+        //self.data::<Data>().buy_books.remove(index.unwrap());
 
         Ok(())
     }
@@ -198,6 +201,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
                 .transfer(caller, value_total)
                 .map_err(|_| PSP22Error::Custom(LunesError::PaymentFail.as_str()))?;
             self.data::<Data>().buy_books.remove(index.unwrap());
+            self.data::<Data>().buy_books[index.unwrap()].penalty = true;
         } else {
             self.data::<Data>().buy_books[index.unwrap()].conflict = true;
         }
@@ -274,17 +278,23 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         Ok(_all_buy)
     }
     /// Close Buy user
-    #[ink(message)]
+    #[ink(message,payable)]
     #[modifiers(non_reentrant)]
     fn close_buy_user(&mut self, id: u64) -> Result<(), PSP22Error> {
+        let mut fee_penalty = Self::env().transferred_value();
         let caller = Self::env().caller();
         let index = self
             .data::<Data>()
             .buy_books.iter()
-            .position(|order| order.id == id && order.owner == caller && order.confirmed == true);
+            .position(|order| order.id == id && order.owner == caller && order.confirmed == false);
         if index.is_none() {
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
         }
+        let owner = self.data::<ownable::Data>().owner.get().unwrap().unwrap();
+        //Payment fee p2p2
+        Self::env()
+            .transfer(owner, fee_penalty)
+            .map_err(|_| PSP22Error::Custom(LunesError::PaymentFail.as_str()))?;
         self.data::<Data>().buy_books.remove(index.unwrap());
         Ok(())
     }
@@ -306,7 +316,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             .skip(((page - 1) * (100 as u64)).try_into().unwrap())
             .take(100)
             .collect();
-
+        _all.sort_by_key(|ordem| ordem.value);
         Ok(_all)
     }
     /// Update fee p2p
@@ -342,5 +352,40 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             min_sales: self.data::<Data>().min_sales
         })
     }
+    #[ink(message)]
+    fn info_traded24h(&mut self)-> Result<Balance, PSP22Error> {       
+        let date_block = Self::env().block_timestamp() - 86624000;
+        let mut _all: Vec<OrdemBook> = Vec::new();
+        _all = self
+            .data::<Data>()
+            .buy_books.iter()
+            .filter(|book| book.penalty == false && book.date_created > date_block)
+            .cloned()
+            .rev()
+            .take(100)
+            .collect();
+        let soma: Balance = _all.iter().map(|ordem| ordem.valor).sum();
+        Ok(soma)
+     }
+     #[ink(message)]
+     #[modifiers(non_reentrant)]
+     #[openbrush::modifiers(only_owner)]
+     fn get_conflict(&mut self,page: u64)-> Result<Vec<BuyBook>, PSP22Error> {
+        if page == 0 {
+            return Err(PSP22Error::Custom(LunesError::InvalidPage.as_str()));
+        }
+        let mut _all_buy: Vec<BuyBook> = Vec::new();
+        _all_buy = self
+            .data::<Data>()
+            .buy_books.iter()
+            .filter(|order| order.conflict == true && order.confirmed == false)
+            .cloned()
+            .rev()
+            .skip(((page - 1) * (100 as u64)).try_into().unwrap())
+            .take(100)
+            .collect();
+        Ok(_all_buy)
+
+     }
 
 }

@@ -10,6 +10,7 @@ pub trait P2pLunesImplLunes {
     fn create_order(
         &mut self,
         price: Balance,
+        fee:Balance,
         pair: String,
         address_payment: String,
     ) -> Result<(), ()>;
@@ -43,4 +44,9 @@ pub trait P2pLunesImplLunes {
     fn update_min_sales(&mut self, min_sales:Balance) -> Result<(), ()>;
     #[ink(message)]
     fn info_contract(&mut self)-> Result<(), ()>;
+    #[ink(message)]
+    fn info_traded24h(&mut self)-> Result<(), ()>;
+    #[ink(message)]
+    fn get_conflict(&mut self,page: u64)-> Result<(), ()>;
+    
 }
