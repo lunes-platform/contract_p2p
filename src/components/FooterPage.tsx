@@ -37,7 +37,7 @@ const FooterPage = () => {
                                 textDecoration: 'none',
                             }}
                         >
-                            <div className="textLeft textLink" style={{ width: "100%" }}><a target='_blank' href='https://t.me/LunesGlobal'>Support P2P</a></div>
+                            <div className="textLeft textLink" style={{ width: "100%" }}><a target='_blank' href='mailto:contact@lunes.io'>Support P2P</a></div>
                         </Typography>
                         <Typography
                             variant="h6"
@@ -61,7 +61,7 @@ const FooterPage = () => {
                                 textDecoration: 'none',
                             }}
                         >
-                           <div className="textRight textLink" style={{ width: "100%" }}><a href='#'>Grupo Telegram</a></div>
+                           <div className="textRight textLink" style={{ width: "100%" }}><a target='_blank' href='https://t.me/LunesGlobal'>Grupo Telegram</a></div>
                         </Typography>  
                         <Typography
                             variant="h6"
@@ -73,7 +73,7 @@ const FooterPage = () => {
                                 textDecoration: 'none',
                             }}
                         >
-                           <div className="textRight textLink" style={{ width: "100%" }}><a href='#'>Grupo Telegram</a></div>
+                           <div className="textRight textLink" style={{ width: "100%" }}><a target='_blank' href='https://t.me/LunesGlobal'>Grupo Telegram</a></div>
                         </Typography>  
                        
                     </Toolbar>
