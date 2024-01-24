@@ -33,7 +33,7 @@ pub mod p2p_lunes{
             let mut instance = Self::default();
             instance.payable_p2p.next_buy_id = 1;
             instance.payable_p2p.next_order_id = 1;
-            instance.payable_p2p.fee_p2p = 1;
+            instance.payable_p2p.fee_p2p = 3;
             instance.payable_p2p.min_sales = 10_000_000_000;
             instance.payable_p2p.days_expire = 605024000; //7 Days in Timestamp
             instance.payable_p2p.books = Default::default();
