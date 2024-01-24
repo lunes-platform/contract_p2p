@@ -126,7 +126,7 @@ const BookTradePage = ({...props}:BookTradeProps) => {
                         </div>
                         <div>Fee P2P: 3%</div>
                         <div>Fee Network: 0.00144 LUNES</div>
-                        <div>Amount + Fee P2P: 10030 LUNES</div>
+                        <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Amount + Fee P2P: 10030 LUNES</div>
                         <div>Time Expire: 7days</div>
                         <div>
                             <Button variant="contained" fullWidth>Create Order</Button>
