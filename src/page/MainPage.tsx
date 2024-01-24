@@ -72,10 +72,10 @@ const MainPage = () => {
     setOpenConfirm(false);
   };
   const handleOrderBuy= () => {
-    setIsSales(false);
+    setIsSales(true);
   };
   const handleOrderSales= () => {
-    setIsSales(true);
+    setIsSales(false);
   };
   const handleConnectWallet= () => {
     setOpenHome(true);

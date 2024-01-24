@@ -120,9 +120,9 @@ const MyOrdersPage = ({...props}:BookTradeProps) => {
 
                 }}>
                    <div style={{paddingBottom:10 }}>
-                   All : {props.isSales?("Shopping"):("Sales")}
-                      <Button onClick={props.clickBuyOrder} variant="contained" style={{marginLeft:10, marginRight:10}} >My Shopping</Button>
-                      <Button onClick={props.clickSalesOrder} variant="contained" style={{marginLeft:10, marginRight:10}}>My Sales</Button>
+                   All : {props.isSales?("Purchase Orders"):("Sell Orders")}
+                      <Button onClick={props.clickBuyOrder} variant="contained" style={{marginLeft:10, marginRight:10}} >My Purchase Orders</Button>
+                      <Button onClick={props.clickSalesOrder} variant="contained" style={{marginLeft:10, marginRight:10}}>My Sell Orders</Button>
                   </div>  
                     <Typography
                         sx={{

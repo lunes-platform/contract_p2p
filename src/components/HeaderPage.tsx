@@ -48,7 +48,7 @@ const HeaderPage = ({ ...props }: HeaderProps) => {
                             variant="h6"
                             noWrap
                         >
-                            LUNES  - P2P
+                            LUNES  - P2P (BETA TEST)
                         </Typography>
                         {props.isReady?(infoChange()):(<></>)}
                     </Toolbar>

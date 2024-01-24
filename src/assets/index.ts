@@ -10,6 +10,7 @@ const pair_options = [
     { label: 'PIX', type: 'PIX' },
     { label: 'FRAC', type: 'FRAC' },
     { label: 'SOLAANA ', type: 'SOL' },
+    { label: 'GMC/BNB ', type: 'GMC ' },
 ];
 const receipt_type =[
     { label: 'PER/TEXT', type: 'TEXT' },

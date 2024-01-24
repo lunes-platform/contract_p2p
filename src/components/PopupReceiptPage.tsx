@@ -35,29 +35,14 @@ const PopupReceiptPage = ({ ...props }: PopupProps) => {
                 
                 
                 <div>
-                    <Autocomplete
-                        disablePortal
-                        fullWidth
-                        options={assets.receipt_type}
-                        renderInput={(params) => <TextField   {...params} label="Receipt Type" />}
-                    />
-                </div>
-                <div>
                     <TextField
-                        label={`Receipt Text`}
+                        label={`add txid`}
                         fullWidth
                         type={"text"}
                         variant="filled"
                     />
                 </div>
-                <div>
-                    <TextField
-                        label={`Receipt File`}
-                        fullWidth
-                        type={"file"}
-                        variant="filled"
-                    />
-                </div>
+                
                 <div>Date expire to deposit: 12/01/2023 10:19</div>
                 <div style={{color:"red"}}>Attention: Negotiations not completed result in a fine.</div>
             </DialogContent>
