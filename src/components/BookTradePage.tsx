@@ -92,11 +92,11 @@ const BookTradePage = ({...props}:BookTradeProps) => {
                     <div className="boxInfoHeader" style={{ padding: 20, marginBottom: 50 }}>
                         <div>Your Balnace: 112301.100 LUNES</div>
                         <div>
-                            <Autocomplete
-                                disablePortal
+                            <TextField
+                                label={`Price`}
                                 fullWidth
-                                options={assets.values_type}
-                                renderInput={(params) => <TextField   {...params} label="Price" />}
+                                type={"number"}
+                                variant="filled"
                             />
                         </div>
                         <div>
