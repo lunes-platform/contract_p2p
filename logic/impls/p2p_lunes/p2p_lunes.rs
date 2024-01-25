@@ -21,7 +21,9 @@ pub trait P2pLunesImpl:
         price: Balance,
         fee: Balance,
         pair: String,
-        address_payment: String,
+        erc20_address: Option<[u8; 20]>,
+        btc_address: Option<String>,
+        info_payment: Option<String>,
     ) -> Result<(), PSP22Error> {
         let mut total_sell = Self::env().transferred_value();
         if total_sell <= self.data::<Data>().min_sales {
@@ -39,7 +41,7 @@ pub trait P2pLunesImpl:
         let caller = Self::env().caller();
         let id = self.data::<Data>().next_order_id;
         self.data::<Data>().books.push(OrdemBook {
-            address_payment: address_payment,
+            erc20_address: erc20_address,
             date_expire: date_expire,
             date_created: date_block,
             id: id,
@@ -48,6 +50,8 @@ pub trait P2pLunesImpl:
             price: price,
             value: total_sell,
             cencel: false,
+            btc_address:btc_address,
+            info_payment:info_payment
         });
         self.data::<Data>().next_order_id += 1;
         Ok(())
@@ -95,9 +99,13 @@ pub trait P2pLunesImpl:
         let next_id = self.data::<Data>().next_buy_id;
         let price = self.data::<Data>().books[index.unwrap()].price;
         let sell_pwner = self.data::<Data>().books[index.unwrap()].owner;
-        let address_payment = self.data::<Data>().books[index.unwrap()]
-            .address_payment
+        let info_payment = self.data::<Data>().books[index.unwrap()].info_payment.clone();
+        let erc20_address = self.data::<Data>().books[index.unwrap()]
+            .erc20_address
             .clone();
+        let btc_address = self.data::<Data>().books[index.unwrap()]
+        .btc_address
+        .clone();
         let pair = self.data::<Data>().books[index.unwrap()].pair.clone();
         self.data::<Data>().books[index.unwrap()].value = total_orderm - quantity;
         self.data::<Data>().buy_books.push(BuyBook {
@@ -110,8 +118,10 @@ pub trait P2pLunesImpl:
             date_expire: date_expire,
             receipt: String::from(""),
             sell_owner: sell_pwner,
-            address_payment: address_payment,
+            erc20_address: erc20_address,
             pair: pair,
+            info_payment: info_payment,
+            btc_address:btc_address,
             penalty: false,
             confirmed: false,
         });
@@ -285,7 +295,7 @@ pub trait P2pLunesImpl:
     #[ink(message, payable)]
     #[modifiers(non_reentrant)]
     fn close_buy_user(&mut self, id: u64) -> Result<(), PSP22Error> {
-        let mut fee_penalty = Self::env().transferred_value();
+        let fee_penalty = Self::env().transferred_value();
         let caller = Self::env().caller();
         let index =
             self.data::<Data>().buy_books.iter().position(|order| {
@@ -348,6 +358,7 @@ pub trait P2pLunesImpl:
         self.data::<Data>().min_sales = min_sales;
         Ok(())
     }
+    #[ink(message)]
     fn info_contract(&mut self) -> Result<InfoContract, PSP22Error> {
         Ok(InfoContract {
             fee_p2p: self.data::<Data>().fee_p2p,
@@ -360,17 +371,14 @@ pub trait P2pLunesImpl:
     #[ink(message)]
     fn info_traded24h(&mut self) -> Result<Balance, PSP22Error> {
         let date_block = Self::env().block_timestamp() - 86624000;
-        let mut _all: Vec<OrdemBook> = Vec::new();
-        _all = self
+        let _all: Vec<BuyBook> = self
             .data::<Data>()
             .buy_books
             .iter()
-            .filter(|book| book.penalty == false && book.date_created > date_block)
+            .filter(|book| book.date_created > date_block)
             .cloned()
-            .rev()
-            .take(100)
             .collect();
-        let soma: Balance = _all.iter().map(|ordem| ordem.valor).sum();
+        let soma: Balance = _all.iter().map(|ordem| ordem.value).sum();
         Ok(soma)
     }
     #[ink(message)]
@@ -396,11 +404,10 @@ pub trait P2pLunesImpl:
     #[ink(message)]
     fn user_penalty(&mut self) -> Result<BuyBook, PSP22Error> {
         let caller = Self::env().caller();
-        let bookby: BuyBook = self
-            .data::<Data>()
-            .buy_books
-            .iter()
-            .find(|book| book.penalty == true && book.owner == caller);
-        Ok(bookby)
+        if let Some(bookby) = self.data::<Data>().buy_books.iter().find(|book| book.penalty && book.owner == caller) {
+            Ok(bookby.clone())
+        } else {
+            return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
+        }
     }
 }
