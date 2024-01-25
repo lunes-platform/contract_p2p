@@ -48,5 +48,7 @@ pub trait P2pLunesImplLunes {
     fn info_traded24h(&mut self)-> Result<(), ()>;
     #[ink(message)]
     fn get_conflict(&mut self,page: u64)-> Result<(), ()>;
+    #[ink(message)]
+    fn user_penalty(&mut self)-> Result<(), ()>;
     
 }
