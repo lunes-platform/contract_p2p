@@ -4,8 +4,7 @@
 pub mod p2p_lunes{
     use openbrush::{
         contracts::{
-            ownable,           
-            reentrancy_guard,
+            ownable, reentrancy_guard, traits::psp22::PSP22Error
         },
         traits::Storage,
     };
@@ -20,6 +19,16 @@ pub mod p2p_lunes{
         guard: reentrancy_guard::Data,
         #[storage_field]
         ownable: ownable::Data,
+    }
+    /// Event emitted when a order create
+    #[ink(event)]
+    pub struct OrderEvent {
+        #[ink(topic)]
+        type_order: u32, //1 = Buy - 2 = Sall
+        #[ink(topic)]
+        value: Balance, // Value
+        #[ink(topic)]
+        id: u64,//Id order sell ou buy
     }
     impl P2pLunesImpl for P2pLunesContract {}
 
@@ -40,6 +49,16 @@ pub mod p2p_lunes{
             instance.payable_p2p.buy_books = Default::default();
             instance
         }
+          /// Set envent order
+          #[ink(message)]
+          pub fn set_envent_order(&self,type_order:u32,value:Balance, id:u64 ) -> Result<(),PSP22Error> {
+            self.env().emit_event(OrderEvent {
+                type_order,
+                value,
+                id
+            });
+            Ok(())
+          }
     }
    
 }
