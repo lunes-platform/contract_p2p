@@ -52,5 +52,7 @@ pub trait P2pLunesImplLunes {
     fn user_penalty(&mut self)-> Result<(), ()>;
     #[ink(message)]
     fn best_price(&mut self, pair:String, value:Balance)->   Result<(), ()>;
+    #[ink(message)]
+    fn all_order_owner(&mut self, page: u64) -> Result<(), ()>;
     
 }

@@ -401,6 +401,7 @@ pub trait P2pLunesImpl:
             .collect();
         Ok(_all_buy)
     }
+    ///Payment penalty
     #[ink(message)]
     fn user_penalty(&mut self) -> Result<BuyBook, PSP22Error> {
         let caller = Self::env().caller();
@@ -410,6 +411,7 @@ pub trait P2pLunesImpl:
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
         }
     }
+    ///Best price
     #[ink(message)]
     fn best_price(&mut self, pair:String, value:Balance) -> Result<Vec<OrdemBook>, PSP22Error> {
         let _menor_preco = self.data::<Data>().books
@@ -426,5 +428,26 @@ pub trait P2pLunesImpl:
             return Ok(_menores);
         }
         Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()))
+    }
+    ///All order owner
+    #[ink(message)]
+    fn all_order_owner(&mut self, page: u64)-> Result<Vec<OrdemBook>, PSP22Error> {
+        if page == 0 {
+            return Err(PSP22Error::Custom(LunesError::InvalidPage.as_str()));
+        }
+        let caller = Self::env().caller();
+        let mut _all: Vec<OrdemBook> = Vec::new();
+        _all = self
+            .data::<Data>()
+            .books
+            .iter()
+            .filter(|book| book.owner == caller)
+            .cloned()
+            .rev()
+            .skip(((page - 1) * (100 as u64)).try_into().unwrap())
+            .take(100)
+            .collect();
+        _all.sort_by_key(|ordem| ordem.price);
+        Ok(_all)
     }
 }
