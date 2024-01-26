@@ -21,7 +21,7 @@ pub trait P2pLunesImpl:
         price: Balance,
         fee: Balance,
         pair: String,
-        erc20_address: Option<[u8; 20]>,
+        erc20_address: [u8; 20],
         btc_address: Option<String>,
         info_payment: Option<String>,
     ) -> Result<(), PSP22Error> {
@@ -315,7 +315,7 @@ pub trait P2pLunesImpl:
     /// All books
     #[ink(message)]
     #[modifiers(non_reentrant)]
-    fn alll_books(&mut self, page: u64) -> Result<Vec<OrdemBook>, PSP22Error> {
+    fn all_books(&mut self, page: u64) -> Result<Vec<OrdemBook>, PSP22Error> {
         if page == 0 {
             return Err(PSP22Error::Custom(LunesError::InvalidPage.as_str()));
         }
@@ -331,7 +331,7 @@ pub trait P2pLunesImpl:
             .skip(((page - 1) * (100 as u64)).try_into().unwrap())
             .take(100)
             .collect();
-        _all.sort_by_key(|ordem| ordem.value);
+        _all.sort_by_key(|ordem| ordem.price);
         Ok(_all)
     }
     /// Update fee p2p
@@ -409,5 +409,22 @@ pub trait P2pLunesImpl:
         } else {
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
         }
+    }
+    #[ink(message)]
+    fn best_price(&mut self, pair:String, value:Balance) -> Result<Vec<OrdemBook>, PSP22Error> {
+        let _menor_preco = self.data::<Data>().books
+            .iter()
+            .filter(|order| order.pair == pair && order.value >=value)
+            .min_by_key(|order| order.price)
+            .map(|order| order.price);
+        if let Some(menor_preco) = _menor_preco {
+            let _menores: Vec<OrdemBook> = self.data::<Data>().books.iter()
+                .filter(|order| order.price == menor_preco && order.pair == pair && order.value >=value)
+                .rev()
+                .cloned()
+                .collect();
+            return Ok(_menores);
+        }
+        Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()))
     }
 }
