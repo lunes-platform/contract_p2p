@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 import FooterPage from "../components/FooterPage";
 import HeaderPage from "../components/HeaderPage";
@@ -14,6 +14,7 @@ import PopupOpenConflit from "../components/PopupOpenConflit";
 import PopupOpenCancel from "../components/PopupOpenCancel";
 import PopupOpenConfirm from "../components/PopupOpenConfirm";
 import WalletConnectPage from "../components/WalletConnectPage";
+import ContractService from "../hooks/ContractService";
 const classes = {
   root: {
     flexGrow: 1,
@@ -49,6 +50,34 @@ const MainPage = () => {
   const [openCancel, setOpenCancel] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [openHome, setOpenHome] = React.useState(false);
+  const {
+          infoContractHandler, 
+          infoTraded24hHandler,
+          connectWalletHandler,
+          contract, 
+          balanceLunes,
+          infContract,
+          inf24h, 
+          loading,
+          account, 
+          apiReady,
+          contractReady, 
+          allBooksHandler
+  } = ContractService();
+
+  useEffect(()=>{
+    infoContractHandler()      
+  },[contract])
+  useEffect(()=>{
+    infoTraded24hHandler()      
+  },[contract])
+  useEffect(()=>{
+    setPageType("home")      
+  },[infContract])
+  useEffect(()=>{
+    allBooksHandler("1")      
+  },[infContract])
+
   const handleClose = () => {
     setOpen(false);
     setOpenInfo(true);
@@ -77,8 +106,8 @@ const MainPage = () => {
   const handleOrderSales= () => {
     setIsSales(false);
   };
-  const handleConnectWallet= () => {
-    setOpenHome(true);
+  const handleConnectWallet= async () => {
+    await connectWalletHandler();   
   };
   const pagesView = () => {
     if (pageType == 'home'){
@@ -87,7 +116,7 @@ const MainPage = () => {
           clickOrder={()=>{}}
           clickBuyNow={() => setOpen(true)}
           clickMyTrader={() =>setPageType("order")}/>
-        <BookTradePage books={[]} clickSelectBuy={handleSelectBuy} />
+        <BookTradePage info={infContract} balance={balanceLunes} books={[]} clickSelectBuy={handleSelectBuy} />
       </>
       )
     }
@@ -104,23 +133,20 @@ const MainPage = () => {
           isSales={isSales}          
           clickBack={()=>setPageType("home")}
           clickSelectInfo={()=>setOpenInfo(true)}/>)
-    }
-   
-      
+    } 
   }
   return (
     <React.Fragment>
-      <HeaderPage Valume={10} isReady={openHome} totalTraded={100} />
+      <HeaderPage Valume={inf24h.valume} isReady={contractReady} totalTraded={inf24h.trander} />
 
       <Box
         component="form"
-
         style={{ display: "flex", alignItems: "center", textAlign: "center" }}
         noValidate
         autoComplete="off"
       >
         <div style={classes.root}>
-          {!openHome?(<WalletConnectPage handleClose={()=>handleConnectWallet()}/>):(pagesView())}
+          {!contractReady?(<WalletConnectPage handleClose={()=>handleConnectWallet()}/>):(pagesView())}
           
         </div>
       </Box>

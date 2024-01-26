@@ -40,7 +40,9 @@ const rows = [
 ];
 type BookTradeProps = {
     books: [],
-    clickSelectBuy: any
+    clickSelectBuy: any,
+    balance:number,
+    info:any
 }
 const BookTradePage = ({...props}:BookTradeProps) => {
     const getBooks = () => {
@@ -90,15 +92,7 @@ const BookTradePage = ({...props}:BookTradeProps) => {
                     padding: 10,
                 }}>
                     <div className="boxInfoHeader" style={{ padding: 20, marginBottom: 50 }}>
-                        <div>Your Balnace: 112301.100 LUNES</div>
-                        <div>
-                            <TextField
-                                label={`Price`}
-                                fullWidth
-                                type={"number"}
-                                variant="filled"
-                            />
-                        </div>
+                        <div>Your Balnace:{props.balance} LUNES</div>
                         <div>
                             <Autocomplete
                                 disablePortal
@@ -108,9 +102,27 @@ const BookTradePage = ({...props}:BookTradeProps) => {
                             />
                         </div>
                         <div>
+                            <TextField                                
+                                label={`Price`}
+                                placeholder="0.00000"
+                                fullWidth
+                                type={"number"}
+                                variant="filled"
+                            />
+                        </div>
+                        <div>
                         
                             <TextField
-                                label={`Address / Info to payment`}
+                                label={`Address Payment`}
+                                fullWidth
+                                type={"text"}
+                                variant="filled"
+                            />
+                        </div>
+                        <div>
+                        
+                            <TextField
+                                label={`Info to payment (optional)`}
                                 fullWidth
                                 type={"text"}
                                 variant="filled"
@@ -124,8 +136,8 @@ const BookTradePage = ({...props}:BookTradeProps) => {
                                 renderInput={(params) => <TextField   {...params} label="Amount" />}
                             />
                         </div>
-                        <div>Fee P2P: 3%</div>
-                        <div>Fee Network: 0.00144 LUNES</div>
+                        <div>Fee P2P: {props.info.feeP2p}%</div>
+                        <div>Fee Network: {props.balance} LUNES</div>
                         <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Amount + Fee P2P: 10030 LUNES</div>
                         <div>Time Expire: 7days</div>
                         <div>
