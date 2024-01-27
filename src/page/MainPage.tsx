@@ -15,6 +15,7 @@ import PopupOpenCancel from "../components/PopupOpenCancel";
 import PopupOpenConfirm from "../components/PopupOpenConfirm";
 import WalletConnectPage from "../components/WalletConnectPage";
 import ContractService from "../hooks/ContractService";
+import { Alert, Button, CircularProgress } from "@mui/material";
 const classes = {
   root: {
     flexGrow: 1,
@@ -50,6 +51,7 @@ const MainPage = () => {
   const [openCancel, setOpenCancel] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [openHome, setOpenHome] = React.useState(false);
+  const [alert, setAlert] = React.useState(false)
   const {
           infoContractHandler, 
           infoTraded24hHandler,
@@ -61,8 +63,19 @@ const MainPage = () => {
           loading,
           account, 
           apiReady,
+          successMsg,
+          error,
           contractReady, 
-          allBooksHandler
+          allBooksHandler,
+          allOrderOwnerHandler,
+          feeNwtWorkOrderHandler,
+          createOrderHandler,
+          allbooks,
+          feeNetword,
+          noSuficBalance,
+          setLoading,
+          handleOnSelect,
+          accounts
   } = ContractService();
 
   useEffect(()=>{
@@ -76,8 +89,14 @@ const MainPage = () => {
   },[infContract])
   useEffect(()=>{
     allBooksHandler("1")      
-  },[infContract])
-
+  },[contract])
+  useEffect(()=>{
+    if(error || successMsg)
+      setAlert(true)
+  },[error, successMsg])
+  const handleLoadinglose = () => {
+    setLoading(false)
+  };
   const handleClose = () => {
     setOpen(false);
     setOpenInfo(true);
@@ -109,14 +128,33 @@ const MainPage = () => {
   const handleConnectWallet= async () => {
     await connectWalletHandler();   
   };
+  const handleCreateOrder = async (order:any) => {
+    createOrderHandler(order.price, order.fee,order.pair,order.erc20_address,order.btc_address,order.info_payment,order.value)
+  };
+  const handleFeeCreateOrder = async (order:any) => { 
+    feeNwtWorkOrderHandler(order.price, order.fee,order.pair,order.erc20_address,order.btc_address,order.info_payment,order.value)
+  };
+  
   const pagesView = () => {
     if (pageType == 'home'){
       return (<>
         <MenuPage
-          clickOrder={()=>{}}
+          clicAllkOrder={()=>allBooksHandler("1")}
+          clickOrder={()=>allOrderOwnerHandler("1")}
           clickBuyNow={() => setOpen(true)}
           clickMyTrader={() =>setPageType("order")}/>
-        <BookTradePage info={infContract} balance={balanceLunes} books={[]} clickSelectBuy={handleSelectBuy} />
+        <BookTradePage 
+          account={account}
+          accounts={accounts}
+          handleOnSelectAccount={handleOnSelect}
+          isHavebalance={noSuficBalance}
+          getFee={handleFeeCreateOrder}
+          clickCreateOrder={handleCreateOrder}
+          feeNetwork={feeNetword}
+          info={infContract} 
+          balance={balanceLunes} 
+          books={allbooks} 
+          clickSelectBuy={handleSelectBuy} />
       </>
       )
     }
@@ -135,9 +173,17 @@ const MainPage = () => {
           clickSelectInfo={()=>setOpenInfo(true)}/>)
     } 
   }
+  const handleAlertClose = () => {
+    setAlert(false)
+}
   return (
     <React.Fragment>
-      <HeaderPage Valume={inf24h.valume} isReady={contractReady} totalTraded={inf24h.trander} />
+       <Dialog onClose={handleLoadinglose} open={loading}>
+        <Box sx={{ width: '250px', height: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      </Dialog>
+      <HeaderPage info={inf24h} isReady={contractReady}/>
 
       <Box
         component="form"
@@ -187,11 +233,24 @@ const MainPage = () => {
       </BootstrapDialog>
       <BootstrapDialog
         onClose={handleCloseConfirm}
-        aria-labelledby="customized-dialog-title"
         open={openConfirm}
       >
         <PopupOpenConfirm handleClose={handleCloseConfirm} />
       </BootstrapDialog>
+      <Dialog onClose={handleAlertClose} open={alert}>
+        <Box sx={{ width: '300px', height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {error ? (
+            <Alert severity="error" > {error}</Alert>
+          ) : (
+            <Alert severity="success">{successMsg}</Alert>
+          )}
+        </Box>
+        <Button
+          onClick={handleAlertClose}
+        >
+          Close
+        </Button>
+      </Dialog>
       <FooterPage />
     </React.Fragment>
   );

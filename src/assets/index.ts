@@ -15,14 +15,14 @@ const pair_options = [
 ];
 
 const values_type =[
-    { label: '1000 LUNES', value: 1000 },
-    { label: '5000 LUNES', value: 5000 },
-    { label: '10000 LUNES', value: 10000 },
-    { label: '15000 LUNES', value: 15000 },
-    { label: '20000 LUNES', value: 20000 },
-    { label: '30000 LUNES', value: 30000 },
-    { label: '40000 LUNES', value: 40000 },
-    { label: '50000 LUNES', value: 50000 },
-    { label: '500000 LUNES', value: 500000 },
+    { label: '1000 LUNES', value: "1000" },
+    { label: '5000 LUNES', value: "5000" },
+    { label: '10000 LUNES', value: "10000" },
+    { label: '15000 LUNES', value: "15000" },
+    { label: '20000 LUNES', value: "20000" },
+    { label: '30000 LUNES', value: "30000" },
+    { label: '40000 LUNES', value: "40000" },
+    { label: '50000 LUNES', value: "50000" },
+    { label: '500000 LUNES', value: "500000" },
 ]
 export default {pair_options, values_type}

@@ -3,6 +3,7 @@ import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import BookOnlineOutlinedIcon from '@mui/icons-material/BookTwoTone';
 import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
 type HeaderProps = {
+    clicAllkOrder: any,
     clickOrder: any,
     clickMyTrader: any,
     clickBuyNow: any,
@@ -10,6 +11,12 @@ type HeaderProps = {
 const MenuPage = ({...prop}:HeaderProps) => {
     return (
         <div>
+             <Button
+                startIcon={<ReceiptLongOutlinedIcon />}
+                color="primary"
+                style={{ fontSize: 18, marginTop: 20, marginLeft:10 }}
+                onClick={prop.clicAllkOrder}
+                variant="contained">All Orders</Button>
             <Button
                 startIcon={<ReceiptLongOutlinedIcon />}
                 color="primary"

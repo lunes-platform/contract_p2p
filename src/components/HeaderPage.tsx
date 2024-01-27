@@ -10,8 +10,7 @@ const darkTheme = createTheme({
     },
 });
 type HeaderProps = {
-    totalTraded: number
-    Valume: number,
+    info: any,
     isReady: boolean,
 }
 const HeaderPage = ({ ...props }: HeaderProps) => {
@@ -26,12 +25,12 @@ const HeaderPage = ({ ...props }: HeaderProps) => {
             
                     <div style={{ float: 'right', marginLeft: '10px' }}>
                         <div className='boxInfoHeader'>
-                            Traded: {props.totalTraded} LUNES IN 24h
+                            Traded: {props.info.trander} LUNES IN 24h
                         </div>
                     </div>
                     <div style={{ float: 'right', marginLeft: '10px' }}>
                         <div className='boxInfoHeader'>
-                            Valume: {props.Valume}  LUNES
+                            Valume: {props.info.valume}
                         </div>
                     </div>
             </Typography>
