@@ -11,21 +11,16 @@ import Timestamp from 'react-timestamp';
 
 type PopupProps = {
     handleClose: any,
+    handleConfirm: any,
     order:any,
-    isFrist:boolean
+    feeNetWork:any
 }
-const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
-    const getTotal = () =>{
-        let price_ = convertAmountLunes(props.order.price)
-        let amount_ = convertAmountLunes(props.order.value)
-        let tt = price_ * amount_
-        
-        return tt || 0
-    }
+const PopupOpenCancelOwner = ({ ...props }: PopupProps) => {
+
     return (
         <div>
             <DialogTitle sx={{ m: 0, p: 2 }} >
-               ID {props.order.id} - My P2P LUNES
+                ID: {props.order.id}- Cancel P2P
             </DialogTitle>
             <IconButton
                 aria-label="close"
@@ -42,25 +37,26 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
             <DialogContent dividers>
                 <div style={{textAlign:"center"}}>Payment information</div>
                 
-                <img src={`img/qr.png`} style={{ width: "250px", margin:"auto" }}  />
-                <div>{props.order.btcAddress?props.order.btcAddress:props.order.erc20Address}
-                <Button autoFocus color='primary' variant="text">
-                    Copy
-                </Button>
-                </div>
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
-                <div>Total: {getTotal()}  {props.order.pair}</div>
-                <div style={{color:"red"}}>Date expire to deposit: {props.isFrist?(<>1 day</>):(<Timestamp date={convertTimestamp(props.order.dateExpire)} />)}</div>
+                <br/>
+                <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Attention</div>
+                <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Do you confirm?</div>
+                
+                <br/>
+                <div style={{color:"red"}}>Date expire:   {<Timestamp date={convertTimestamp(props.order.dateExpire.toString())} />}</div>
             </DialogContent>
             <DialogActions>
+            <div style={{ margin: "auto", alignItems: "flex-start" }}>Fee Network: {props.feeNetWork} LUNES </div>
                 <Button onClick={props.handleClose} variant="text">
                     Close
                 </Button>
-              
+                <Button autoFocus color='primary' variant="contained" onClick={()=>props.handleConfirm(props.order.id)}>
+                    Confirm
+                </Button>
             </DialogActions>
         </div>
 
     )
 }
-export default PopupInfoPaymentPage
+export default PopupOpenCancelOwner

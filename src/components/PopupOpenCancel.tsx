@@ -46,6 +46,7 @@ const PopupOpenCancel = ({ ...props }: PopupProps) => {
                 <div style={{color:"red"}}>Date expire to deposit: 12/01/2023 10:19</div>
             </DialogContent>
             <DialogActions>
+                 <div style={{ margin: "auto", alignItems: "flex-start" }}>Fee Network: 12.oo LUNES </div>
                 <Button onClick={props.handleClose} variant="text">
                     Close
                 </Button>

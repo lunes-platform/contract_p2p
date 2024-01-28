@@ -17,7 +17,7 @@ import { BN } from '@polkadot/util/bn'
 import { formatBalance } from '@polkadot/util';
 const decimals = new BN('100000000')
 
-const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5DcTWeE9RkzvZEv4m1U4Q2WpQz9jWUP7wuxFQJczU2uWYsEL'
+const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5DWzhcWCDn51RduP2NZy5rWFWcxsaf8WWz1oNnqdAzukirfe'
 
 const ContractService = () => {
   const { api, apiReady } = useContext(ApiContext)
@@ -34,7 +34,6 @@ const ContractService = () => {
   const [alltrader, setAllTrader] = useState([])
   const [balanceLunes, setBalanceLunes] = useState<number>(0)
   const [feeNetword, setFeeNetword] = useState<number>(0)
-  const [noSuficBalance, setNoSuficBalance] = useState(false)
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([])
   useEffect(() => {
     const getBalance = async () => {
@@ -43,8 +42,6 @@ const ContractService = () => {
       const balanceL: any = await api.query.system.account(account?.address)
       const bal = formatBalance(balanceL.data.free.toBn(), { decimals: 8 }).split(" ")
       let balance = Number(bal[0])
-      let have_balance = balance > 1000
-      setNoSuficBalance(have_balance)
       setBalanceLunes(balance)
       setLoading(false)
     }
@@ -177,7 +174,6 @@ const ContractService = () => {
       info.valume = bal[0] +" "+type_amount_lunes(bal[1])
       info.trander = trader_amount / 100000000
       setinf24h(info)
-      console.log('info24',info)
     }
   }
   const allBooksHandler = async (page: string) => {
@@ -312,7 +308,7 @@ const ContractService = () => {
       return
     }
     try {
-      const price = Number(price_.replaceAll(".", "").replaceAll(",", "").trim()) * 100000000
+      const price = Number(price_) * 100000000
       const gasLimit: any = getGasLimit(api)
       console.log("amount_price", price)
       //Estimativa do gas 
@@ -337,6 +333,7 @@ const ContractService = () => {
         if (result.asErr.isModule) {
           const dispatchError = api.registry.findMetaError(result.asErr.asModule)
           console.log('error', dispatchError.name)
+          setFeeNetword(0)
           error = dispatchError.docs.length ? dispatchError.docs.concat().toString() : dispatchError.name
         } else {
           error = result.asErr.toString()
@@ -349,6 +346,7 @@ const ContractService = () => {
       console.log(fee_)
       setFeeNetword(fee_)
     } catch (e) {
+      setFeeNetword(0)
       console.log(e)
     }
 
@@ -370,7 +368,7 @@ const ContractService = () => {
       return
     }
 
-    const price = Number(price_.replaceAll(".", "").replaceAll(",", "").trim()) * 100000000
+    const price = Number(price_) * 100000000
     setLoading(true)
     const gasLimit: any = getGasLimit(api)
     try {
@@ -407,6 +405,7 @@ const ContractService = () => {
             console.log('in a block')
           }
           if (res.status.isFinalized) {
+            setError("");
             setSuccessMsg('Successfully creted order!')
             infoTraded24hHandler()
             allOrderOwnerHandler("1")
@@ -518,6 +517,7 @@ const ContractService = () => {
       if (result.asErr.isModule) {
         const dispatchError = api.registry.findMetaError(result.asErr.asModule)
         console.log('error', dispatchError.name)
+        setFeeNetword(0)
         error = dispatchError.docs.length ? dispatchError.docs.concat().toString() : dispatchError.name
       } else {
         error = result.asErr.toString()
@@ -566,7 +566,7 @@ const ContractService = () => {
     }
 
   }
-  const feeBuyOrderHandler = async (id: string, quantity: number) => {
+  const feeBuyOrderHandler = async (id: string, quantity: string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -580,7 +580,7 @@ const ContractService = () => {
       setError('Contract not initialized')
       return
     }
-
+    console.log("veio",quantity)
     const gasLimit: any = getGasLimit(api)
     //Estimativa do gas 
     const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::buyOrder'](
@@ -593,7 +593,7 @@ const ContractService = () => {
       quantity
     )
 
-    console.log('feeBuyOrderHandler', storageDeposit.toHuman().Charge)
+    console.log('feeBuyOrderHandler', storageDeposit.toHuman())
     if (result.isErr) {
       let error = ''
       if (result.asErr.isModule) {
@@ -606,10 +606,12 @@ const ContractService = () => {
       setError(error)
       return
     }
-    setFeeNetword(storageDeposit.toHuman().Charge)
+    let fee_ = calc_fee(storageDeposit.toHuman().Charge)
+    console.log(fee_)
+    setFeeNetword(fee_)
   }
 
-  const buyOrderHandler = async (id: string, quantity: number) => {
+  const buyOrderHandler = async (id: string, quantity: string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -626,8 +628,17 @@ const ContractService = () => {
     setLoading(true)
     const gasLimit: any = getGasLimit(api)
     try {
+      const { gasRequired }: any = await contract.query['p2pLunesImpl::buyOrder'](
+        account.address,
+        {
+          gasLimit,
+          storageDepositLimit: null
+        },
+        id,
+        quantity
+      )
       await contract.tx['p2pLunesImpl::buyOrder']({
-        gasLimit,
+        gasLimit:gasRequired,
         storageDepositLimit: null
       },
         id,
@@ -637,6 +648,10 @@ const ContractService = () => {
             console.log('in a block')
           }
           if (res.status.isFinalized) {
+            setError("");
+            setSuccessMsg('Successfully creted order!')
+            infoTraded24hHandler()
+            allOrderOwnerHandler("1")
             setLoading(false)
           }
         })
@@ -727,7 +742,7 @@ const ContractService = () => {
       setLoading(false)
     }
   }
-  const feeOpenConflictSeller = async (id: string) => {
+  const feeOpenConflictSellerHandler  = async (id: string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -770,7 +785,7 @@ const ContractService = () => {
     console.log(fee_)
     setFeeNetword(fee_)
   }
-  const openConflictSeller = async (id: string) => {
+  const openConflictSellerHandler  = async (id: string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -806,7 +821,7 @@ const ContractService = () => {
     }
   }
 
-  const feeCancelOrderSeller = async (id: string, amount: number) => {
+  const feeCancelOrderSellerHandler  = async (id: string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -827,18 +842,19 @@ const ContractService = () => {
       account.address,
       {
         gasLimit,
-        storageDepositLimit: null,
-        value: (new BN(amount)).mul(decimals)
+        storageDepositLimit: null
       },
       id
     )
 
-    console.log('feeCancelOrderSeller', storageDeposit.toHuman().Charge)
+    console.log('feeCancelOrderSeller', storageDeposit.toHuman().Refund)
+    console.log('feeCancelOrderSeller1', result.isErr)
     if (result.isErr) {
       let error = ''
       if (result.asErr.isModule) {
         const dispatchError = api.registry.findMetaError(result.asErr.asModule)
         console.log('error', dispatchError.name)
+        setFeeNetword(0)
         error = dispatchError.docs.length ? dispatchError.docs.concat().toString() : dispatchError.name
       } else {
         error = result.asErr.toString()
@@ -846,11 +862,11 @@ const ContractService = () => {
       setError(error)
       return
     }
-    let fee_ = calc_fee(storageDeposit.toHuman().Charge)
+    let fee_ = calc_fee(storageDeposit.toHuman().Refund)
     console.log(fee_)
     setFeeNetword(fee_)
   }
-  const cancelOrderSeller = async (id: string, amount: number) => {
+  const cancelOrderSellerHandler  = async (id: string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -867,7 +883,99 @@ const ContractService = () => {
     setLoading(true)
     const gasLimit: any = getGasLimit(api)
     try {
+      const { gasRequired }: any = await contract.query['p2pLunesImpl::cancelOrder'](
+        account.address,
+        {
+          gasLimit,
+          storageDepositLimit: null
+        },
+        id
+      )
       await contract.tx['p2pLunesImpl::cancelOrder']({
+        gasLimit:gasRequired,
+        storageDepositLimit: null
+      },
+        id)
+        .signAndSend(account.address, (res) => {
+          if (res.status.isInBlock) {
+            console.log('in a block')
+          }
+          if (res.status.isFinalized) {            
+            infoTraded24hHandler()
+            allOrderOwnerHandler("1")
+            setLoading(false)
+            setError("")
+            setSuccessMsg('Successfully cancel order!')
+          }
+        })
+    } catch {
+      setError("Erro Trasaction")
+      setLoading(false)
+    }
+  }
+  const feeCloseBuyUserHandler  = async (id: string, amount: number) => {
+    if (!api || !apiReady) {
+      setError('The API is not ready')
+      return
+    }
+    if (!account) {
+      setError('Account not initialized')
+      return
+    }
+
+    if (!contract) {
+      setError('Contract not initialized')
+      return
+    }
+
+    const gasLimit: any = getGasLimit(api)
+    //Estimativa do gas 
+    const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::closeBuyUser'](
+      account.address,
+      {
+        gasLimit,
+        storageDepositLimit: null,
+        value: (new BN(amount)).mul(decimals)
+      },
+      id
+    )
+
+    console.log('closeBuyUser', storageDeposit.toHuman().Charge)
+    if (result.isErr) {
+      let error = ''
+      if (result.asErr.isModule) {
+        const dispatchError = api.registry.findMetaError(result.asErr.asModule)
+        console.log('error', dispatchError.name)
+        setFeeNetword(0)
+        error = dispatchError.docs.length ? dispatchError.docs.concat().toString() : dispatchError.name
+      } else {
+        error = result.asErr.toString()
+      }
+      setError(error)
+      return
+    }
+    let fee_ = calc_fee(storageDeposit.toHuman().Charge)
+    console.log(fee_)
+    setFeeNetword(fee_)
+  }
+  const closeBuyUserHandler  = async (id: string, amount: number) => {
+    if (!api || !apiReady) {
+      setError('The API is not ready')
+      return
+    }
+    if (!account) {
+      setError('Account not initialized')
+      return
+    }
+
+    if (!contract) {
+      setError('Contract not initialized')
+      return
+    }
+    setLoading(true)
+    const gasLimit: any = getGasLimit(api)
+    try {
+      await contract.tx['p2pLunesImpl::closeBuyUser']({
         gasLimit,
         storageDepositLimit: null,
         value: (new BN(amount)).mul(decimals)
@@ -901,7 +1009,6 @@ const ContractService = () => {
     orderPenalty,
     alltrader,
     successMsg,
-    noSuficBalance,
     connectWalletHandler,
     infoContractHandler,
     infoTraded24hHandler,
@@ -919,10 +1026,12 @@ const ContractService = () => {
     sendReceiptSellHandler,
     feeReceiptSellHandler,
     bestPriceHandler,
-    feeOpenConflictSeller,
-    openConflictSeller,
-    feeCancelOrderSeller,
-    cancelOrderSeller,
+    feeOpenConflictSellerHandler ,
+    openConflictSellerHandler ,
+    feeCancelOrderSellerHandler ,
+    cancelOrderSellerHandler ,
+    feeCloseBuyUserHandler,
+    closeBuyUserHandler,
     setLoading,
     handleOnSelect,
     accounts

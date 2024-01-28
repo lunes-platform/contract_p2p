@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import Order from "../models/Order";
 import Timestamp from "react-timestamp";
 import Identicon from "@polkadot/react-identicon";
+import { convertAmountLunes, convertTimestamp, getAmont, getPair } from "../utils/convert";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -39,12 +40,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 type BookTradeProps = {
     books: any,
     clickSelectBuy: any,
+    clickSelectCancel:any
     balance: number,
     info: any,
     clickCreateOrder: any,
     feeNetwork: any,
     getFee: any,
-    isHavebalance: boolean,
     account: any,
     accounts: any,
     handleOnSelectAccount: any
@@ -56,6 +57,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
     const [feeP2P, setFeeP2P] = useState("0")
     const [erro, setErro] = useState("")
     const [alert, setAlert] = useState(false)
+    const [isHavebalance, setIsHavebalance] = useState(true)
     useEffect(() => {
         if (order.value) {
             const t = (Number(order.value) * Number(props.info.feeP2p)) / 100
@@ -68,24 +70,16 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             setTotal(tt.toString())
         }
     }, [order])
-    const getKey = (pair: string) => {
-        console.log(pair)
-        if (!pair)
-            return;
-        return assets.pair_options.find(e => e.type == pair)
-    }
-    const getAmont = (value: string) => {
-        return assets.values_type.find(e => e.value == value)
-    }
+    useEffect(() => {
+        let v = Number(props.feeNetwork) ==0
+        setIsHavebalance(v)
+    },[props.feeNetwork])
+
     const handleAlertClose = () => {
         setAlert(false)
     }
-    const convertTimestamp = (value: string) => {
-        return value.replaceAll(",", "").toString().substring(0, 10)
-    }
-    const convertPrice = (value: string) => {
-        return Number(value.replaceAll(",", "").toString()) / 100000000
-    }
+  
+
     const saveOrderHandler = () => {
         order.fee = feeP2P
         order.value = total.toString()
@@ -125,7 +119,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
         setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, pair: "", info_payment: "", value: "" })
     }
     const setTypeAddress = (address: string) => {
-        const key = getKey(order.pair)
+        const key = getPair(order.pair)
         if (!key)
             return;
         if (key.ERC_20) {
@@ -161,14 +155,26 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                             <StyledTableCell align="center">
                                 {row.pair}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{convertPrice(row.price)}</StyledTableCell>
-                            <StyledTableCell align="right">{convertPrice(row.value)}</StyledTableCell>
+                            <StyledTableCell align="right">{convertAmountLunes(row.price)}</StyledTableCell>
+                            <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>
                             <StyledTableCell align="right">
                                 {<Timestamp date={convertTimestamp(row.dateExpire.toString())} />}
                             </StyledTableCell>
-                            <StyledTableCell align="right">
-                                <Button onClick={props.clickSelectBuy}>{props.account?.address == row.owner?("CANCEL"):("BUY")}</Button>
-                            </StyledTableCell>
+                            {
+                                props.account?.address == row.owner?
+                                (
+                                    <StyledTableCell align="right">
+                                        <Button onClick={()=>props.clickSelectCancel(row)}>CENCEL</Button>
+                                    </StyledTableCell>
+                                )
+                                :
+                                (
+                                    <StyledTableCell align="right">
+                                        <Button onClick={()=>props.clickSelectBuy(row)}>BUY</Button>
+                                    </StyledTableCell>
+                                )
+                            }
+                          
 
                         </StyledTableRow>
                     ))}
@@ -223,7 +229,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 disablePortal
                                 fullWidth
                                 onChange={(e, value: any) => setOrder({ ...order, pair: value?.type })}
-                                value={getKey(order.pair)}
+                                value={getPair(order.pair)}
                                 options={assets.pair_options}
                                 renderInput={(params) => <TextField   {...params} label="Pair" />}
                             />
@@ -279,9 +285,9 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                             <Button
                                 variant="contained"
                                 fullWidth
-                                disabled={props.isHavebalance}
+                                disabled={isHavebalance}
                                 onClick={() => saveOrderHandler()}
-                            >{!props.isHavebalance ? (<>Create Order</>) : (<>you don't have enough balance</>)}</Button>
+                            >Create Order</Button>
                         </div>
                     </div>
                 </Grid>

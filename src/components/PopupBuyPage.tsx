@@ -8,16 +8,53 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Autocomplete, TextField } from '@mui/material';
 import assets from '../assets';
+import { convertAmountLunes, convertTimestamp, getAmont } from '../utils/convert';
+import Timestamp from 'react-timestamp';
 
 type PopupProps = {
     handleClose: any,
+    handleConfirm: any,
+    handleBestPrice: any,
+    order:any,
+    feeNetWork:any
 }
 const PopupBuyPage = ({ ...props }: PopupProps) => {
+    const [amount, setAmount] = React.useState("1000")
+    const [amountList, setAmountList] = React.useState(assets.values_type)
+    const [isConfirm, setIsConfirm] = React.useState(false)
+    React.useEffect(()=>{
+        if(props.order?.value){
+            let permList = assets.values_type.filter(el=>Number(el.value)<=convertAmountLunes(props.order?.value.toString()))
+            setAmountList(permList)
+        }
+    },[props.order])
+    
+    React.useEffect(() => {
+        let v = Number(props.feeNetWork) ==0
+        setIsConfirm(v)
+    },[props.feeNetWork])
 
+    React.useEffect(()=>{       
+        if(!amount)
+            setIsConfirm(true)
+        else
+             setIsConfirm(false)
+    },[amount])
+    const getTotal = () =>{
+        let price_ = convertAmountLunes(props.order.price)
+        let amount_ = Number(amount)
+        let tt = price_ * amount_
+        
+        return tt || 0
+    }
+    const confirmHandle =() =>{
+        let a = Number(amount) * 100000000
+        props.handleConfirm(props.order.id,a)
+    }
     return (
         <div>
             <DialogTitle sx={{ m: 0, p: 2 }} >
-                Buy LUNES
+               ID - {props.order.id} Buy LUNES 
             </DialogTitle>
             <IconButton
                 aria-label="close"
@@ -33,10 +70,12 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
             </IconButton>
             <DialogContent dividers>
 
-                <div>
+               {/*
+               <div>
                     <Autocomplete
                         disablePortal
                         fullWidth
+                        value={}
                         options={assets.values_type}
                         renderInput={(params) => <TextField   {...params} label="Amount" />}
                     />
@@ -49,19 +88,29 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
                         renderInput={(params) => <TextField   {...params} label="Pair" />}
                     />
                 </div>
-
-                <div>Amount Search: 100 LUNES</div>
-                <div>Price Uni: 0.03 USDT</div>
-                <div>Total: 3.00 USDT</div>
-                <div>Date expire to deposit: 12/01/2023 10:19</div>
+               */ } 
+                <div>
+                    <Autocomplete
+                        disablePortal
+                        fullWidth                        
+                        onChange={(e, value: any) => setAmount(value?.value)}
+                        value={getAmont(amount)}
+                        options={amountList}
+                        renderInput={(params) => <TextField   {...params} label="Amount" />}
+                    />
+                </div>
+                <div>Volume: {convertAmountLunes(props.order.value)} LUNES</div>
+                <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
+                <div>Total: {getTotal()}  {props.order.pair}</div>
+                <div>Date expire to deposit:   {<Timestamp date={convertTimestamp(props.order.dateExpire)} />}</div>
                 <div style={{ color: "red" }}>Attention: Negotiations not completed result in a fine, confirm?</div>
             </DialogContent>
             <DialogActions>
-                <div style={{ margin: "auto", alignItems: "flex-start" }}>Fee Network: 0.0011</div>
+                <div style={{ margin: "auto", alignItems: "flex-start" }}>Fee Network: {props.feeNetWork} LUNES </div>
                 <Button onClick={props.handleClose} variant="text">
                     Close
                 </Button>
-                <Button autoFocus color='primary' variant="contained" onClick={props.handleClose}>
+                <Button autoFocus color='primary' variant="contained" disabled={isConfirm} onClick={()=>confirmHandle()}>
                     Confirm
                 </Button>
             </DialogActions>
