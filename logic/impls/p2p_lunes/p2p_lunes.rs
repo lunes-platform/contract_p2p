@@ -306,8 +306,8 @@ pub trait P2pLunesImpl:
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
         }
         let owner = self.data::<ownable::Data>().owner.get().unwrap().unwrap();
-        let balance_order  = self.data::<Data>().buy_books[index].value;
-        let owner_order= self.data::<Data>().buy_books[index].sell_owner;
+        let balance_order  = self.data::<Data>().buy_books[index.unwrap()].value;
+        let owner_order= self.data::<Data>().buy_books[index.unwrap()].sell_owner;
         //Payment owner_order
         Self::env()
             .transfer(owner_order, balance_order)
