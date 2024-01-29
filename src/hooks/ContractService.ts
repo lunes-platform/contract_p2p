@@ -37,20 +37,18 @@ const ContractService = () => {
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([])
   const [ownerContract, setOwnerContract] = useState<string>("")
   useEffect(() => {
-    const getBalance = async () => {
-      if (!api || !apiReady || !account) return
-
-      const balanceL: any = await api.query.system.account(account?.address)
-      const balance_fee = convertAmountLunes(balanceL.data.free.toHuman()) - convertAmountLunes(balanceL.data.feeFrozen.toHuman())
-      setBalanceLunes(balance_fee.toString())
-      setLoading(false)
-    }
-
     getBalance()
     listenContract()
     getOwnerContracthHandler()
   }, [api, apiReady, account])
+  const getBalance = async () => {
+    if (!api || !apiReady || !account) return
 
+    const balanceL: any = await api.query.system.account(account?.address)
+    const balance_fee = convertAmountLunes(balanceL.data.free.toHuman()) - convertAmountLunes(balanceL.data.feeFrozen.toHuman())
+    setBalanceLunes(balance_fee.toString())
+    setLoading(false)      
+  }
   const listenContract = () =>{
     if (!api || !apiReady) {
       return
@@ -59,10 +57,15 @@ const ContractService = () => {
       events.forEach((record:any) => {
           const { event, phase } = record;
           // Verificar se o evento é do seu contrato
-          console.log('Evento detectado:', event.section );
+          console.log('phase detectado:', event.section );
           if (event.section === 'seuContrato' && event.method === 'SeuEvento') {
               console.log('Evento detectado:', event.data.toString());
           }
+          if (event.section === 'balances' && event.method === 'Transfer') {
+            if( event.data.toHuman().to == account?.address || event.data.toHuman().from == account?.address){
+              getBalance()
+            }
+        }
       });
   });
   }

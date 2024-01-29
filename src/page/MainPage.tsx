@@ -121,10 +121,7 @@ const MainPage = () => {
     if (error || successMsg)
       setAlert(true)
   }, [error, successMsg])
-  useEffect(() => {
-    if(successMsg)
-      connectWalletHandler()
-  }, [successMsg])
+
 
   const handleLoadinglose = () => {
     setLoading(false)
