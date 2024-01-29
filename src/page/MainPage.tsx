@@ -145,7 +145,7 @@ const MainPage = () => {
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
-  const handleCloseConfirmConflit= () => {
+  const handleCloseConfirmConflit = () => {
     setOpenPaymentConfirConflit(false);
   };
 
@@ -230,7 +230,7 @@ const MainPage = () => {
     feeCloseBuyUserHandler(order_buy.id, amount.toString())
     setOpenCancel(true)
   }
-  const handlePaymentconfirmconclit = (order_buy:any) => {
+  const handlePaymentconfirmconclit = (order_buy:any) => {    
     setOrderbuy(order_buy)
     feeTransferConflictSeleHandler(order_buy.id, false)
     setOpenPaymentConfirConflit(true)
@@ -386,7 +386,6 @@ const MainPage = () => {
           feeNetWork={feeNetword}
           handleConfirm={handleConfirmOrderCancelOwner}
           order={order}
-          key={1}
           handleClose={handleCloseOrderCancelOwner} />
       </BootstrapDialog>
       <BootstrapDialog
@@ -397,7 +396,7 @@ const MainPage = () => {
         <PopupConflitApprovPaymentPage
           feeNetWork={feeNetword}
           handleConfirm={transferConflictSeleHandler}
-          order={order}
+          order={orderBuy}
           handleClose={handleCloseConfirmConflit} />
       </BootstrapDialog>
       <Dialog onClose={handleAlertClose} open={alert}>

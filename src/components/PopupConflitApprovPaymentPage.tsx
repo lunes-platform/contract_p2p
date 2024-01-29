@@ -16,6 +16,9 @@ type PopupProps = {
     feeNetWork:any
 }
 const PopupConflitApprovPaymentPage = ({ ...props }: PopupProps) => {
+    React.useEffect(()=>{
+        console.log("veio", props.order)
+    },[])
     const getTotal = () =>{
         let price_ = convertAmountLunes(props.order.price)
         let amount_ = convertAmountLunes(props.order.value)
