@@ -17,7 +17,7 @@ import { BN } from '@polkadot/util/bn'
 import { formatBalance } from '@polkadot/util';
 const decimals = new BN('100000000')
 
-const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5DFB9G4DTVVFqsmcQiSC6BPurjB3N4L9oFtTCauJqdcPcbcM'
+const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5ERbpJWSZbVqU8BYQCHyb9u8Z4Rk4xs3joCbSp29NX9j17kW'
 
 const ContractService = () => {
   const { api, apiReady } = useContext(ApiContext)
