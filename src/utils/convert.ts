@@ -23,7 +23,19 @@ const getPair = (pair: string) => {
         return;
     return assets.pair_options.find(e => e.type == pair)
 }
+const getPairLabel = (pair: string) => {
+    if (!pair)
+        return;
+    return assets.pair_options.find(e => e.type == pair)?.label
+}
+const getPairType = (pair: string) => {
+    if (!pair)
+        return;
+    return assets.pair_options.find(e => e.type == pair)?.type
+}
 const getAmont = (value: string) => {
+    if(!value)
+        return;
     return assets.values_type.find(e => e.value == value)
 }
 const convertTimestamp = (value: string) => {   
@@ -32,7 +44,13 @@ const convertTimestamp = (value: string) => {
 const convertAmountLunes = (value: string) => {
     if(!value)
         return 0
-    console.log(value)
     return Number(value.replaceAll(",", "").toString()) / 100000000
 }
-export {calc_fee, type_amount_lunes, getPair,getAmont, convertTimestamp,convertAmountLunes}
+const getTotalPayment = (price:string, amount:string) =>{
+    let price_ = convertAmountLunes(price)
+    let amount_ = convertAmountLunes(amount)
+    let tt = price_ * amount_
+    
+    return tt || 0
+}
+export {calc_fee, type_amount_lunes, getPair,getAmont, convertTimestamp,convertAmountLunes,getTotalPayment,getPairLabel,getPairType}

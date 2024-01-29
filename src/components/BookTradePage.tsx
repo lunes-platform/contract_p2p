@@ -41,7 +41,7 @@ type BookTradeProps = {
     books: any,
     clickSelectBuy: any,
     clickSelectCancel:any
-    balance: number,
+    balance: string,
     info: any,
     clickCreateOrder: any,
     feeNetwork: any,

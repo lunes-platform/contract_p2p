@@ -8,11 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { convertAmountLunes, convertTimestamp } from '../utils/convert';
 import Timestamp from 'react-timestamp';
+import QRCode from 'react-qr-code';
 
 type PopupProps = {
     handleClose: any,
-    order:any,
-    isFrist:boolean
+    order:any
 }
 const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
     const getTotal = () =>{
@@ -40,18 +40,22 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
                 <CloseIcon />
             </IconButton>
             <DialogContent dividers>
-                <div style={{textAlign:"center"}}>Payment information</div>
+                <div style={{textAlign:"center", fontSize:20}}>Payment information</div>    
+                <div  style={{ width: "250px", margin:"auto" }}>
+                    <QRCode value={props.order.btcAddress?props.order.btcAddress:props.order.erc20Address} />
+                </div>            
                 
-                <img src={`img/qr.png`} style={{ width: "250px", margin:"auto" }}  />
-                <div>{props.order.btcAddress?props.order.btcAddress:props.order.erc20Address}
-                <Button autoFocus color='primary' variant="text">
+                <div style={{textAlign:"center", fontSize:18, fontWeight:"bold", margin:15}}>{props.order.btcAddress?props.order.btcAddress:props.order.erc20Address}
+                {/**
+                 <Button autoFocus color='primary' variant="text">
                     Copy
                 </Button>
+                 */}
                 </div>
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
                 <div>Total: {getTotal()}  {props.order.pair}</div>
-                <div style={{color:"red"}}>Date expire to deposit: {props.isFrist?(<>1 day</>):(<Timestamp date={convertTimestamp(props.order.dateExpire)} />)}</div>
+                <div style={{color:"red"}}>Date expire to deposit: <Timestamp date={convertTimestamp(props.order.dateExpire)} /></div>
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleClose} variant="text">

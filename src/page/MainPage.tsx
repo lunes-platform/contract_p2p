@@ -46,7 +46,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const MainPage = () => {
   const [pageType, setPageType] = React.useState("home");
   const [open, setOpen] = React.useState(false);
-  const [isSales, setIsSales] = React.useState(false);
   const [openInfo, setOpenInfo] = React.useState(false);
   const [openReceipt, setOpenReceipt] = React.useState(false);
   const [openConflit, setOpenConflit] = React.useState(false);
@@ -54,7 +53,10 @@ const MainPage = () => {
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [openOrderCancelOwner, setOrderCancelOwner] = React.useState(false);
   const [order, setOrder] = React.useState();
+  const [orderBuy, setOrderbuy] = React.useState()
   const [alert, setAlert] = React.useState(false)
+  const [anableReceipt, setEnableReceipt] = React.useState(false)
+
   const {
     infoContractHandler,
     infoTraded24hHandler,
@@ -65,9 +67,9 @@ const MainPage = () => {
     inf24h,
     loading,
     account,
-    apiReady,
     successMsg,
     error,
+    alltrader,
     contractReady,
     allBooksHandler,
     allOrderOwnerHandler,
@@ -81,7 +83,19 @@ const MainPage = () => {
     handleOnSelect,
     accounts,
     feeBuyOrderHandler,
-    buyOrderHandler
+    buyOrderHandler,
+    buyBooksUserHandler,
+    buyBooksSellerHandler,
+    feeReceiptSellHandler,
+    sendReceiptSellHandler,
+    feeOpenConflictSellerHandler,
+    openConflictSellerHandler,
+    feeCloseBuyUserHandler,
+    closeBuyUserHandler,
+    feeConfirmSellHandler,
+    confirmSellHandler,
+    openConflictUserHandler,
+    feeOpenConflictUserHandler
   } = ContractService();
 
   useEffect(() => {
@@ -104,7 +118,6 @@ const MainPage = () => {
     setLoading(false)
   };
 
-
   const handleCloseInfo = () => {
     setOpenInfo(false);
   };
@@ -120,12 +133,7 @@ const MainPage = () => {
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
-  const handleOrderBuy = () => {
-    setIsSales(true);
-  };
-  const handleOrderSales = () => {
-    setIsSales(false);
-  };
+
   const handleConnectWallet = async () => {
     await connectWalletHandler();
   };
@@ -155,21 +163,66 @@ const MainPage = () => {
     setOpen(true)
   }
   const handleBuyClose = () => {
-    setOpenInfo(true);
+    setOpen(false);
   };
   const handleConfirmOrderBuy = async (id: string, amount:string) => {
     await buyOrderHandler(id,amount)
-    setOpenInfo(true)
-    setOpen(false)
+    setPageType("order")
   };
+  const handleAllTraderUser = async () =>{
+    setLoading(true)
+    await buyBooksUserHandler("1")
+    setPageType("order")
+    setLoading(false)
+  }
+  const handleOrderBuy = async () => {
+    setLoading(true)
+    await buyBooksUserHandler("1")
+    setLoading(false)
+  };
+  const handleOrderSales = async () => {
+    setLoading(true)
+    await buyBooksSellerHandler("1")
+    setLoading(false)
+  };
+  const handleInfoPayment = (order_buy:any) => {
+    setOrderbuy(order_buy)
+    setOpenInfo(true)
+  }
+  const handleInfoReceipt = (order_buy:any) => {
+    setOrderbuy(order_buy)
+    if(account?.address == order_buy.sellOwner)
+      setEnableReceipt(true)
+    feeReceiptSellHandler(order_buy.id, "b4505fd7ed20c11e7fc23f69aaabae559cca34e45d26e7c7c40ab7b59819f49f")
+    setOpenReceipt(true)
+  }
+  const handleOpenconflit = (order_buy:any) => {
+    setOrderbuy(order_buy)
+    if(account?.address == order_buy.sellOwner)
+      feeOpenConflictSellerHandler(order_buy.id)
+    else
+      feeOpenConflictUserHandler(order_buy.id)
+    setOpenConflit(true)
+  }
+  const handleConfirmPayment = (order_buy:any) => {
+    setOrderbuy(order_buy)
+    feeConfirmSellHandler(order_buy.id)
+    setOpenConfirm(true)
+  }
+  const handleCancelOrder = (order_buy:any) => {
+    setOrderbuy(order_buy)
+    let amount = convertAmountLunes(order_buy.value);
+    feeCloseBuyUserHandler(order_buy.id, amount.toString())
+    setOpenCancel(true)
+  }
   const pagesView = () => {
     if (pageType == 'home') {
       return (<>
         <MenuPage
           clicAllkOrder={() => allBooksHandler("1")}
           clickOrder={() => allOrderOwnerHandler("1")}
-          clickBuyNow={() => setOpen(true)}
-          clickMyTrader={() => setPageType("order")} />
+          //clickBuyNow={() => setOpen(true)}
+          clickMyTrader={() => handleAllTraderUser()} />
         <BookTradePage
           account={account}
           accounts={accounts}
@@ -188,16 +241,16 @@ const MainPage = () => {
 
     if (pageType == 'order') {
       return (<MyOrdersPage
-        clickBuyOrder={() => handleOrderBuy()}
-        clickSalesOrder={() => handleOrderSales()}
-        clickSelectConfirm={() => setOpenConfirm(true)}
-        clickSelectConflit={() => setOpenConflit(true)}
-        clickSelectReceipt={() => setOpenReceipt(true)}
-        clickSelectClose={() => setOpenCancel(true)}
-        books={[]}
-        isSales={isSales}
-        clickBack={() => setPageType("home")}
-        clickSelectInfo={() => setOpenInfo(true)} />)
+                clickBuyOrder={() => handleOrderBuy()}
+                clickSalesOrder={() => handleOrderSales()}
+                clickSelectConfirm={handleConfirmPayment}
+                clickSelectConflit={handleOpenconflit}
+                clickSelectReceipt={handleInfoReceipt}
+                clickSelectClose={handleCancelOrder}
+                books={alltrader}
+                account={account}
+                clickBack={() => setPageType("home")}
+                clickSelectInfo={handleInfoPayment} />)
     }
   }
   const handleAlertClose = () => {
@@ -243,9 +296,8 @@ const MainPage = () => {
         open={openInfo}
       >
         <PopupInfoPaymentPage 
-        order={order}
-        isFrist={true}
-        handleClose={handleCloseInfo} />
+          order={orderBuy}
+          handleClose={handleCloseInfo} />
       </BootstrapDialog>
       <BootstrapDialog
         key={4}
@@ -253,7 +305,13 @@ const MainPage = () => {
         aria-labelledby="customized-dialog-title"
         open={openReceipt}
       >
-        <PopupReceiptPage handleClose={handleCloseReceipt} />
+        <PopupReceiptPage 
+          feeNetWork={feeNetword}
+          getFee={feeReceiptSellHandler}
+          enable={anableReceipt}
+          handleConfirm={sendReceiptSellHandler}
+          order={orderBuy}
+          handleClose={handleCloseReceipt} />
       </BootstrapDialog>
       <BootstrapDialog
         key={5}
@@ -261,7 +319,14 @@ const MainPage = () => {
         aria-labelledby="customized-dialog-title"
         open={openConflit}
       >
-        <PopupOpenConflit handleClose={handleCloseConflit} />
+        <PopupOpenConflit 
+          account={account}
+          feeNetWork={feeNetword}
+          handleSallerConfirm={openConflictSellerHandler}
+          handleUserConfirm={openConflictUserHandler}
+          info={infContract}
+          order={orderBuy}      
+          handleClose={handleCloseConflit} />
       </BootstrapDialog>
       <BootstrapDialog
         key={6}
@@ -269,14 +334,23 @@ const MainPage = () => {
         aria-labelledby="customized-dialog-title"
         open={openCancel}
       >
-        <PopupOpenCancel handleClose={handleCloseCancel} />
+        <PopupOpenCancel 
+          feeNetWork={feeNetword}
+          handleConfirm={closeBuyUserHandler}
+          info={infContract}
+          order={orderBuy}        
+          handleClose={handleCloseCancel} />
       </BootstrapDialog>
       <BootstrapDialog
         key={7}
         onClose={handleCloseConfirm}
         open={openConfirm}
       >
-        <PopupOpenConfirm handleClose={handleCloseConfirm} />
+        <PopupOpenConfirm 
+          feeNetWork={feeNetword}
+          handleConfirm={confirmSellHandler}
+          order={orderBuy}        
+          handleClose={handleCloseConfirm} />
       </BootstrapDialog>
       <BootstrapDialog
         key={8}

@@ -6,7 +6,7 @@ type HeaderProps = {
     clicAllkOrder: any,
     clickOrder: any,
     clickMyTrader: any,
-    clickBuyNow: any,
+    //clickBuyNow: any,
 }
 const MenuPage = ({...prop}:HeaderProps) => {
     return (
@@ -28,11 +28,13 @@ const MenuPage = ({...prop}:HeaderProps) => {
                 color="primary"
                 onClick={prop.clickMyTrader}
                 style={{ fontSize: 18, marginTop: 20, marginLeft:10 }}>My Trader</Button>
-             <Button variant="contained"
+             {/**
+              * <Button variant="contained"
                 startIcon={<CurrencyBitcoinIcon />}
                 color="info"
                 onClick={prop.clickBuyNow}
-                style={{ fontSize: 18, marginTop: 20, marginLeft:10 }}>Buy Now</Button>    
+                style={{ fontSize: 18, marginTop: 20, marginLeft:10 }}>Buy Now</Button> 
+              */}   
             
         </div>
     )

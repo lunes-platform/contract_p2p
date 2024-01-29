@@ -6,16 +6,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Timestamp from 'react-timestamp';
+import { convertAmountLunes, convertTimestamp, getTotalPayment } from '../utils/convert';
 
 type PopupProps = {
     handleClose: any,
+    handleConfirm: any,
+    order:any,   
+    feeNetWork:any
 }
 const PopupOpenConfirm = ({ ...props }: PopupProps) => {
 
     return (
         <div>
             <DialogTitle sx={{ m: 0, p: 2 }} >
-                ID:1 - Confirm Pyament
+                ID:{props.order.id} - Confirm Pyament
             </DialogTitle>
             <IconButton
                 aria-label="close"
@@ -32,21 +37,22 @@ const PopupOpenConfirm = ({ ...props }: PopupProps) => {
             <DialogContent dividers>
                 <div style={{textAlign:"center"}}>Payment information</div>
                 
-                <div>Amount: 100 LUNES</div>
-                <div>Price Uni: 0.03 USDT</div>
-                <div>Total: 3.00 USDT</div>
+                <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
+                <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
+                <div>Total: {getTotalPayment(props.order.price,props.order.value)}  {props.order.pair}</div>
                 <br/>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Attention</div>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Your Confirm Pyament</div>
-                <div style={{textAlign:"center",fontSize:18, fontWeight:"bold"}}>Amount: 100 LUNES</div>
+                <div style={{textAlign:"center",fontSize:18, fontWeight:"bold"}}>Amount:  {convertAmountLunes(props.order.value)} LUNES</div>
                 <br/>
-                <div style={{color:"red"}}>Date expire to deposit: 12/01/2023 10:19</div>
+                <div style={{color:"red"}}>Date expire to deposit: <Timestamp date={convertTimestamp(props.order.dateExpire)} /></div>
             </DialogContent>
             <DialogActions>
+                <div style={{ margin: "auto", alignItems: "flex-start" }}>Fee Network: {props.feeNetWork} LUNES </div>
                 <Button onClick={props.handleClose} variant="text">
                     Close
                 </Button>
-                <Button autoFocus color='primary' variant="contained" onClick={props.handleClose}>
+                <Button autoFocus color='primary' variant="contained" onClick={()=>{props.handleConfirm(props.order.id);props.handleClose()}}>
                     Confirm
                 </Button>
             </DialogActions>
