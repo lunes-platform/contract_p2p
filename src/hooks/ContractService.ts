@@ -17,7 +17,7 @@ import { BN } from '@polkadot/util/bn'
 import { formatBalance } from '@polkadot/util';
 const decimals = new BN('100000000')
 
-const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5DWzhcWCDn51RduP2NZy5rWFWcxsaf8WWz1oNnqdAzukirfe'
+const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5DFB9G4DTVVFqsmcQiSC6BPurjB3N4L9oFtTCauJqdcPcbcM'
 
 const ContractService = () => {
   const { api, apiReady } = useContext(ApiContext)
@@ -1009,7 +1009,8 @@ const ContractService = () => {
       setError('Account not initialized')
       return
     }
-
+    setError("")
+    setSuccessMsg("")     
     if (!contract) {
       setError('Contract not initialized')
       return
@@ -1038,8 +1039,7 @@ const ContractService = () => {
             infoTraded24hHandler()
             allOrderOwnerHandler("1")
             setLoading(false)
-            setError("")
-            setSuccessMsg("")           
+                 
             setSuccessMsg('Successfully cancel order!')
           }
         })
