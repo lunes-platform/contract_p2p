@@ -18,6 +18,7 @@ import ContractService from "../hooks/ContractService";
 import { Alert, Button, CircularProgress } from "@mui/material";
 import PopupOpenCancelOwner from "../components/PopupOpenCancelOwner";
 import { convertAmountLunes } from "../utils/convert";
+import PopupConflitApprovPaymentPage from "../components/PopupConflitApprovPaymentPage";
 const classes = {
   root: {
     flexGrow: 1,
@@ -56,6 +57,7 @@ const MainPage = () => {
   const [orderBuy, setOrderbuy] = React.useState()
   const [alert, setAlert] = React.useState(false)
   const [anableReceipt, setEnableReceipt] = React.useState(false)
+  const [openPaymentconfirmconclit, setOpenPaymentConfirConflit] = React.useState(false);
 
   const {
     infoContractHandler,
@@ -95,7 +97,11 @@ const MainPage = () => {
     feeConfirmSellHandler,
     confirmSellHandler,
     openConflictUserHandler,
-    feeOpenConflictUserHandler
+    feeOpenConflictUserHandler,
+    ownerContract,
+    allOrderWithConflitHandler,
+    transferConflictSeleHandler,
+    feeTransferConflictSeleHandler
   } = ContractService();
 
   useEffect(() => {
@@ -138,6 +144,9 @@ const MainPage = () => {
   };
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
+  };
+  const handleCloseConfirmConflit= () => {
+    setOpenPaymentConfirConflit(false);
   };
 
   const handleConnectWallet = async () => {
@@ -221,6 +230,11 @@ const MainPage = () => {
     feeCloseBuyUserHandler(order_buy.id, amount.toString())
     setOpenCancel(true)
   }
+  const handlePaymentconfirmconclit = (order_buy:any) => {
+    setOrderbuy(order_buy)
+    feeTransferConflictSeleHandler(order_buy.id, false)
+    setOpenPaymentConfirConflit(true)
+  }
   const pagesView = () => {
     if (pageType == 'home') {
       return (<>
@@ -253,6 +267,9 @@ const MainPage = () => {
                 clickSelectConflit={handleOpenconflit}
                 clickSelectReceipt={handleInfoReceipt}
                 clickSelectClose={handleCancelOrder}
+                clickOrderWithConflit={allOrderWithConflitHandler}
+                clickOpenConfirConflit={handlePaymentconfirmconclit}
+                ownerContract={ownerContract}
                 books={alltrader}
                 account={account}
                 clickBack={() => setPageType("home")}
@@ -371,6 +388,17 @@ const MainPage = () => {
           order={order}
           key={1}
           handleClose={handleCloseOrderCancelOwner} />
+      </BootstrapDialog>
+      <BootstrapDialog
+        key={9}
+        onClose={handleCloseConfirmConflit}
+        open={openPaymentconfirmconclit}
+      >
+        <PopupConflitApprovPaymentPage
+          feeNetWork={feeNetword}
+          handleConfirm={transferConflictSeleHandler}
+          order={order}
+          handleClose={handleCloseConfirmConflit} />
       </BootstrapDialog>
       <Dialog onClose={handleAlertClose} open={alert}>
         <Box sx={{ width: '300px', height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

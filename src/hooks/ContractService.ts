@@ -35,6 +35,7 @@ const ContractService = () => {
   const [balanceLunes, setBalanceLunes] = useState<string>("")
   const [feeNetword, setFeeNetword] = useState<number>(0)
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([])
+  const [ownerContract, setOwnerContract] = useState<string>("")
   useEffect(() => {
     const getBalance = async () => {
       if (!api || !apiReady || !account) return
@@ -46,8 +47,25 @@ const ContractService = () => {
     }
 
     getBalance()
-
+    listenContract()
+    getOwnerContracthHandler()
   }, [api, apiReady, account])
+
+  const listenContract = () =>{
+    if (!api || !apiReady) {
+      return
+    }
+    api.query.system.events((events:any) => {
+      events.forEach((record:any) => {
+          const { event, phase } = record;
+          // Verificar se o evento é do seu contrato
+          console.log('Evento detectado:', event.section );
+          if (event.section === 'seuContrato' && event.method === 'SeuEvento') {
+              console.log('Evento detectado:', event.data.toString());
+          }
+      });
+  });
+  }
   useEffect(() => {
     if (apiReady)
       setLoading(false)
@@ -200,6 +218,7 @@ const ContractService = () => {
       const object = output.toHuman().Ok?.Ok
       setAllbooks(object);
     }
+    await setEventOrderhHandler()
   }
 
   const allOrderOwnerHandler = async (page: string) => {
@@ -1136,6 +1155,193 @@ const ContractService = () => {
       setLoading(false)
     }
   }
+  const setEventOrderhHandler = async () => {
+    if (!api || !apiReady) {
+      return
+    }
+    if (!account) {
+      return
+    }
+
+    if (!contract) {
+      return
+    }
+    const gasLimit: any = getGasLimit(api)
+   
+    const { result, output }: any = await contract.query['setEnventOrder'](
+      account.address,
+      {
+        gasLimit,
+      },
+      1,
+      1,
+      1
+    )
+    if (result.isErr) {
+      setError(result.isErr)
+    }
+    if (output && !result.isErr) {
+      const object = output.toHuman()
+      
+      console.log("setEventOrderhHandler",object)
+    }
+  }
+  const getOwnerContracthHandler = async () => {
+    if (!api || !apiReady) {
+      return
+    }
+    if (!account) {
+      return
+    }
+
+    if (!contract) {
+      return
+    }
+    const gasLimit: any = getGasLimit(api)
+   
+    const { result, output }: any = await contract.query['ownable::owner'](
+      account.address,
+      {
+        gasLimit,
+      }
+    )
+    if (result.isErr) {
+      setError(result.isErr)
+    }
+    if (output && !result.isErr) {
+      const object = output.toHuman()
+      setOwnerContract(object.Ok)
+      console.log("ownable::owner",object)
+    }
+  }
+  const allOrderWithConflitHandler = async (page: string) => {
+    if (!api || !apiReady) {
+      return
+    }
+    if (!account) {
+      return
+    }
+
+    if (!contract) {
+      return
+    }
+    setLoading(true)
+    const gasLimit: any = getGasLimit(api)
+    
+    const { result, output }: any = await contract.query['p2pLunesImpl::getConflict'](
+      account.address,
+      {
+        gasLimit,
+      },
+      page
+    )
+    if (result.isErr) {
+      setError(result.isErr)
+    }
+    if (output && !result.isErr) {
+      const object = output.toHuman().Ok?.Ok
+      console.log('p2pLunesImpl::getConflict',object)
+      setAllbooks(object || []);
+    }
+    setLoading(false)
+  }
+  const feeTransferConflictSeleHandler  = async (id: string, confirmPayment:boolean) => {
+    if (!api || !apiReady) {
+      setError('The API is not ready')
+      return
+    }
+    if (!account) {
+      setError('Account not initialized')
+      return
+    }
+
+    if (!contract) {
+      setError('Contract not initialized')
+      return
+    }
+
+    const gasLimit: any = getGasLimit(api)
+    //Estimativa do gas 
+    const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::transferConflictSele'](
+      account.address,
+      {
+        gasLimit,
+        storageDepositLimit: null
+      },
+      id,
+      confirmPayment
+    )
+
+    console.log('transferConflictSele', storageDeposit.toHuman().Charge)
+    console.log('transferConflictSele', result.isErr)
+    if (result.isErr) {
+      let error = ''
+      if (result.asErr.isModule) {
+        const dispatchError = api.registry.findMetaError(result.asErr.asModule)
+        console.log('error', dispatchError.name)
+        setFeeNetword(0)
+        error = dispatchError.docs.length ? dispatchError.docs.concat().toString() : dispatchError.name
+      } else {
+        error = result.asErr.toString()
+      }
+      setError(error)
+      return
+    }
+    let fee_ = calc_fee(storageDeposit.toHuman().Charge)
+    console.log(fee_)
+    setFeeNetword(fee_)
+  }
+  const transferConflictSeleHandler  = async (id: string, confirmPayment:boolean) => {
+    if (!api || !apiReady) {
+      setError('The API is not ready')
+      return
+    }
+    if (!account) {
+      setError('Account not initialized')
+      return
+    }
+
+    if (!contract) {
+      setError('Contract not initialized')
+      return
+    }
+   
+    setLoading(true)
+    const gasLimit: any = getGasLimit(api)
+    try {
+      const { gasRequired }: any = await contract.query['p2pLunesImpl::transferConflictSele'](
+        account.address,
+        {
+          gasLimit,
+          storageDepositLimit: null
+        },
+        id,
+        confirmPayment
+      )
+      await contract.tx['p2pLunesImpl::transferConflictSele']({
+        gasLimit:gasRequired,
+        storageDepositLimit: null,
+      },
+        id,
+        confirmPayment)
+        .signAndSend(account.address, (res) => {
+          if (res.status.isInBlock) {
+            console.log('in a block')
+          }
+          if (res.status.isFinalized) {
+            infoTraded24hHandler()
+            allOrderWithConflitHandler("1")
+            setLoading(false)
+            setError("")
+            setSuccessMsg("")           
+            setSuccessMsg('Successfully cancel order!')
+          }
+        })
+    } catch {
+      setError("Erro Trasaction")
+      setLoading(false)
+    }
+  }
   return {
     contract,
     loading,
@@ -1178,7 +1384,12 @@ const ContractService = () => {
     feeOpenConflictUserHandler,
     setLoading,
     handleOnSelect,
-    accounts
+    accounts,
+    setEventOrderhHandler,
+    ownerContract,
+    allOrderWithConflitHandler,
+    transferConflictSeleHandler,
+    feeTransferConflictSeleHandler
   }
 }
 export default ContractService
