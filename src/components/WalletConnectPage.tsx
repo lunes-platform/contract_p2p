@@ -27,7 +27,22 @@ const WalletConnectPage = ({ ...props }: PopupProps) => {
             }}>
                 <div style={{ fontSize: 20, fontWeight: "bold" }}>Download Now</div>
             </Grid>
-            <Grid item xs={12} md={2} style={{
+            <Grid item xs={12} md={3} style={{
+                textAlign: 'center',
+                color: '#000',
+                padding: 10,
+            }}>
+                <a target="_blank" href="https://polkadot.js.org/extension/">
+                    <div>
+                        <img src={`img/poikadot.svg`} style={{ width: "200px", margin: "auto" }} />
+                    </div>
+                    <div style={{ fontSize: 20, fontWeight: "bold" }}>
+                        Wallet Polkadot extension
+                    </div>
+                </a>
+
+            </Grid>
+            <Grid item xs={12} md={3} style={{
                 textAlign: 'center',
                 color: '#000',
                 padding: 10,
@@ -41,7 +56,7 @@ const WalletConnectPage = ({ ...props }: PopupProps) => {
                     </div>
                 </a>
             </Grid>
-            <Grid item xs={12} md={2} style={{
+            <Grid item xs={12} md={3} style={{
                 textAlign: 'center',
                 color: '#000',
                 padding: 10,
