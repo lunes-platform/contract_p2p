@@ -306,6 +306,12 @@ pub trait P2pLunesImpl:
             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
         }
         let owner = self.data::<ownable::Data>().owner.get().unwrap().unwrap();
+        let balance_order  = self.data::<Data>().buy_books[index].value;
+        let owner_order= self.data::<Data>().buy_books[index].sell_owner;
+        //Payment owner_order
+        Self::env()
+            .transfer(owner_order, balance_order)
+            .map_err(|_| PSP22Error::Custom(LunesError::PaymentFail.as_str()))?;
         //Payment fee p2p2
         Self::env()
             .transfer(owner, fee_penalty)
@@ -402,7 +408,7 @@ pub trait P2pLunesImpl:
             .collect();
         Ok(_all_buy)
     }
-    ///Payment penalty
+    ///Get Payment penalty
     #[ink(message)]
     fn user_penalty(&mut self) -> Result<BuyBook, PSP22Error> {
         let caller = Self::env().caller();
@@ -451,4 +457,26 @@ pub trait P2pLunesImpl:
         _all.sort_by_key(|ordem| ordem.price);
         Ok(_all)
     }
+     /// Payment penalty
+     #[ink(message, payable)]
+     #[modifiers(non_reentrant)]
+     fn payment_penalty_user(&mut self, id: u64) -> Result<(), PSP22Error> {
+         let fee_penalty = Self::env().transferred_value();
+         let caller = Self::env().caller();
+         let index =
+             self.data::<Data>().buy_books.iter().position(|order| {
+                 order.id == id && order.owner == caller && order.penalty == true
+             });
+         if index.is_none() {
+             return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
+         }
+         let owner = self.data::<ownable::Data>().owner.get().unwrap().unwrap();
+         
+         //Payment fee p2p2
+         Self::env()
+             .transfer(owner, fee_penalty)
+             .map_err(|_| PSP22Error::Custom(LunesError::PaymentFail.as_str()))?;
+         self.data::<Data>().buy_books.remove(index.unwrap());
+         Ok(())
+     }
 }

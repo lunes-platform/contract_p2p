@@ -63,11 +63,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             const t = (Number(order.value) * Number(props.info.feeP2p)) / 100
             const tt = t + Number(order.value)
             const fee = t * 100000000
-            console.log('order.value',order.value)
-            order.fee = fee.toString()   
-            console.log('t',t)
-            console.log('tt',tt)
-            console.log('fee',t)
+            order.fee = fee.toString()              
             setFeeP2P(fee.toString())
             setTotal(tt.toString())
         }

@@ -29,7 +29,7 @@ const ContractService = () => {
   const [contractReady, setContractReady] = useState(false)
   const [infContract, setInfoContract] = useState(InfoModal)
   const [orderPenalty, setOrderPenalty] = useState(BuyBook) 
-  const [inf24h, setinf24h] = useState(InfoExchange)
+  const [inf24h, setinf24h] = useState({})
   const [allbooks, setAllbooks] = useState([])
   const [alltrader, setAllTrader] = useState([])
   const [balanceLunes, setBalanceLunes] = useState<string>("")
@@ -67,8 +67,8 @@ const ContractService = () => {
 
     /* check if wallet is installed */
     if (extensions.length === 0) {
-      console.log("The user does not have any Substrate wallet installed")
       setError('The user does not have any Substrate wallet installed')
+      setLoading(false)      
       return
     }
     // set the first wallet as the signer (we assume there is only one wallet)
@@ -80,13 +80,11 @@ const ContractService = () => {
       setAccounts(injectedAccounts)
       setAccount(injectedAccounts[0])
     }
-    console.log(injectedAccounts[0]);
     conectcontract()
   }
   const conectcontract = () => {
     const contract = new ContractPromise(api, ABI, CONTRACT_ADDRESS);
     setContract(contract)
-    console.log("contract", contract)
   }
   const handleOnSelect = async (event: any) => {
     if (!api || !apiReady) {
@@ -137,7 +135,6 @@ const ContractService = () => {
       info.nextOrderId = Number(object.nextOrderId)
       info.minSales = Number(object.minSales.toString().replaceAll(',', '').trim())
       setInfoContract(info)
-      console.log('info', info)
       setContractReady(true)
     }
 
@@ -154,7 +151,7 @@ const ContractService = () => {
       return
     }
     const gasLimit: any = getGasLimit(api)
-
+   
     const { result, output }: any = await contract.query['p2pLunesImpl::infoTraded24h'](
       account.address,
       {
@@ -172,6 +169,7 @@ const ContractService = () => {
       const bal = formatBalance(dataRest.data.free.toBn(), { decimals: 8 }).split(" ")
       info.valume = bal[0] +" "+type_amount_lunes(bal[1])
       info.trander = trader_amount / 100000000
+      console.log("infoTraded24hHandler",info)
       setinf24h(info)
     }
   }
@@ -201,7 +199,6 @@ const ContractService = () => {
     if (output && !result.isErr) {
       const object = output.toHuman().Ok?.Ok
       setAllbooks(object);
-      console.log('setAllbooks', object)
     }
   }
 
@@ -231,7 +228,6 @@ const ContractService = () => {
     if (output && !result.isErr) {
       const object = output.toHuman().Ok?.Ok
       setAllbooks(object || []);
-      console.log('allOrderOwnerHandler', output.toHuman())
     }
   }
   const bestPriceHandler = async (pair: string, value: number) => {
@@ -261,7 +257,6 @@ const ContractService = () => {
     if (output && !result.isErr) {
       const object = output.toHuman().Ok?.Ok
       setAllbooks(object);
-      console.log('bestPriceHandler', object)
     }
   }
 
@@ -290,7 +285,6 @@ const ContractService = () => {
     if (output && !result.isErr) {
       const object = output.toHuman().Ok?.Ok
       setOrderPenalty(object);
-      console.log('setOrderPenalty', object)
     }
   }
   const feeNwtWorkOrderHandler = async (price_: string, fee: string, pair: string, erc20Address: string, btcAddress: string, infoPayment: string, amount: string) => {
@@ -309,7 +303,6 @@ const ContractService = () => {
     try {
       const price = Number(price_) * 100000000
       const gasLimit: any = getGasLimit(api)
-      console.log("amount_price", erc20Address)
       //Estimativa do gas 
       const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::createOrder'](
         account.address,
@@ -332,7 +325,6 @@ const ContractService = () => {
         setError("");
         if (result.asErr.isModule) {          
           const dispatchError = api.registry.findMetaError(result.asErr.asModule)
-          console.log('error', dispatchError.name)
           setFeeNetword(0)
           error = dispatchError.docs.length ? dispatchError.docs.concat().toString() : dispatchError.name
         } else {
@@ -343,7 +335,6 @@ const ContractService = () => {
       }
 
       let fee_ = calc_fee(storageDeposit.toHuman().Charge)
-      console.log(fee_)
       setFeeNetword(fee_)
     } catch (e) {
       setFeeNetword(0)
@@ -450,7 +441,6 @@ const ContractService = () => {
     if (output && !result.isErr) {
       const object = output.toHuman().Ok?.Ok
       setAllTrader(object);
-      console.log('buyBooksSeller', object)
     }
   }
   const buyBooksUserHandler = async (page: string) => {

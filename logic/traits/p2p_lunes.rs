@@ -32,7 +32,7 @@ pub trait P2pLunesImplLunes {
     fn buy_books_seller(&mut self, page: u64) -> Result<(), ()>;
     #[ink(message)]
     fn buy_books_user(&mut self, page: u64) -> Result<(), ()>;
-    #[ink(message)]
+    #[ink(message,payable)]
     fn close_buy_user(&mut self, id: u64) -> Result<(), ()>;
     #[ink(message)]
     fn all_books(&mut self, page: u64) -> Result<(), ()>;
@@ -54,5 +54,7 @@ pub trait P2pLunesImplLunes {
     fn best_price(&mut self, pair:String, value:Balance)->   Result<(), ()>;
     #[ink(message)]
     fn all_order_owner(&mut self, page: u64) -> Result<(), ()>;
+    #[ink(message, payable)]
+    fn payment_penalty_user(&mut self, id: u64) -> Result<(), ()>;
     
 }

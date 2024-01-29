@@ -99,23 +99,25 @@ const MainPage = () => {
   } = ContractService();
 
   useEffect(() => {
-    infoContractHandler()
+      infoContractHandler()
   }, [contract])
-  useEffect(() => {
-    infoTraded24hHandler()
-  }, [contract])
+  useEffect( () => {
+    if(account)
+      infoTraded24hHandler()
+  }, [account])
   useEffect(() => {
     setPageType("home")
   }, [infContract])
-  useEffect(() => {
-    allBooksHandler("1")
+  useEffect(()  => {
+      allBooksHandler("1")    
   }, [contract])
   useEffect(() => {
     if (error || successMsg)
       setAlert(true)
   }, [error, successMsg])
   useEffect(() => {
-    connectWalletHandler()
+    if(successMsg)
+      connectWalletHandler()
   }, [successMsg])
 
   const handleLoadinglose = () => {
@@ -267,7 +269,9 @@ const MainPage = () => {
           <CircularProgress />
         </Box>
       </Dialog>
-      <HeaderPage info={inf24h} isReady={contractReady} />
+      <HeaderPage 
+        info={inf24h} 
+        isReady={contractReady} />
 
       <Box
         component="form"
