@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import Order from "../models/Order";
 import Timestamp from "react-timestamp";
 import Identicon from "@polkadot/react-identicon";
-import { convertAmountLunes, convertTimestamp, getAmont, getPair } from "../utils/convert";
+import { convertAmountLunes, convertTimestamp, getAmont, getPair, getPairLabel } from "../utils/convert";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -63,12 +63,15 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             const t = (Number(order.value) * Number(props.info.feeP2p)) / 100
             const tt = t + Number(order.value)
             const fee = t * 100000000
-            order.fee = fee.toString()
-            order.value = tt.toString()
-            props.getFee(order)
+            console.log('order.value',order.value)
+            order.fee = fee.toString()   
+            console.log('t',t)
+            console.log('tt',tt)
+            console.log('fee',t)
             setFeeP2P(fee.toString())
             setTotal(tt.toString())
         }
+        props.getFee(order)
     }, [order])
     useEffect(() => {
         let v = Number(props.feeNetwork) ==0
@@ -116,7 +119,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
         }
 
         props.clickCreateOrder(order)
-        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, pair: "", info_payment: "", value: "" })
+        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "",price:"", value: "1000" })
     }
     const setTypeAddress = (address: string) => {
         const key = getPair(order.pair)
@@ -153,7 +156,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                         <StyledTableRow key={row.id}>
                             <StyledTableCell align="left">{row.id}</StyledTableCell>
                             <StyledTableCell align="center">
-                                {row.pair}
+                                {getPairLabel(row.pair)}
                             </StyledTableCell>
                             <StyledTableCell align="right">{convertAmountLunes(row.price)}</StyledTableCell>
                             <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>

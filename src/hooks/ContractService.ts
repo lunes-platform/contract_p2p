@@ -309,7 +309,7 @@ const ContractService = () => {
     try {
       const price = Number(price_) * 100000000
       const gasLimit: any = getGasLimit(api)
-      console.log("amount_price", price)
+      console.log("amount_price", erc20Address)
       //Estimativa do gas 
       const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::createOrder'](
         account.address,
@@ -328,8 +328,9 @@ const ContractService = () => {
 
       console.log('feeNwtWorkOrder', storageDeposit.toHuman().Charge)
       if (result.isErr) {
-        let error = ''
-        if (result.asErr.isModule) {
+        let error = ""
+        setError("");
+        if (result.asErr.isModule) {          
           const dispatchError = api.registry.findMetaError(result.asErr.asModule)
           console.log('error', dispatchError.name)
           setFeeNetword(0)
@@ -404,7 +405,8 @@ const ContractService = () => {
             console.log('in a block')
           }
           if (res.status.isFinalized) {
-            setError("");
+            setError("")  
+            setSuccessMsg("")           
             setSuccessMsg('Successfully creted order!')
             infoTraded24hHandler()
             allOrderOwnerHandler("1")
@@ -569,6 +571,7 @@ const ContractService = () => {
             buyBooksSellerHandler("1")
             setLoading(false)
             setError("")
+            setSuccessMsg("")           
             setSuccessMsg('Successfully payment!')
           }
         })
@@ -661,6 +664,7 @@ const ContractService = () => {
           }
           if (res.status.isFinalized) {
             setError("");
+            setSuccessMsg("")           
             setSuccessMsg('Successfully creted order!')
             infoTraded24hHandler()
             buyBooksUserHandler("1")
@@ -758,6 +762,7 @@ const ContractService = () => {
           if (res.status.isFinalized) {
             setLoading(false)
             setError("");
+            setSuccessMsg("")           
             setSuccessMsg('Successfully sender receipt!')
             buyBooksUserHandler("1")
           }
@@ -850,6 +855,7 @@ const ContractService = () => {
             buyBooksSellerHandler("1")
             setLoading(false)
             setError("")
+            setSuccessMsg("")           
             setSuccessMsg('Successfully open Dispute/Conflict!')
           }
         })
@@ -940,6 +946,7 @@ const ContractService = () => {
             buyBooksUserHandler("1")
             setLoading(false)
             setError("")
+            setSuccessMsg("")           
             setSuccessMsg('Successfully open Dispute/Conflict!')
           }
         })
@@ -1032,6 +1039,7 @@ const ContractService = () => {
             allOrderOwnerHandler("1")
             setLoading(false)
             setError("")
+            setSuccessMsg("")           
             setSuccessMsg('Successfully cancel order!')
           }
         })
@@ -1129,6 +1137,7 @@ const ContractService = () => {
             buyBooksUserHandler("1")
             setLoading(false)
             setError("")
+            setSuccessMsg("")           
             setSuccessMsg('Successfully cancel order!')
           }
         })

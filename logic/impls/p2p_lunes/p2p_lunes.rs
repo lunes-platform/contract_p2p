@@ -128,6 +128,7 @@ pub trait P2pLunesImpl:
         if self.data::<Data>().books[index.unwrap()].value <= 0 {
             self.data::<Data>().books.remove(index.unwrap());
         }
+        self.data::<Data>().next_buy_id +=1; 
         Ok(())
     }
     /// Confirm sell order

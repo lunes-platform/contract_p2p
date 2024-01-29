@@ -55,6 +55,9 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
                 <div>Total: {getTotal()}  {props.order.pair}</div>
+                <br/>
+                <div style={{background:"#DAE2ED"}}>{props.order.info_payment}</div>
+                <br/>
                 <div style={{color:"red"}}>Date expire to deposit: <Timestamp date={convertTimestamp(props.order.dateExpire)} /></div>
             </DialogContent>
             <DialogActions>
