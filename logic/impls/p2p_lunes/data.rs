@@ -40,6 +40,7 @@ pub struct BuyBook {
     pub erc20_address: [u8; 20],
     pub btc_address: Option<String>,
     pub info_payment: Option<String>,
+    pub txid_payment: Option<[u8; 32]>,
     pub pair: String,    
     pub penalty:bool,
     pub date_created: u64,

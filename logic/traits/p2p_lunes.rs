@@ -56,5 +56,7 @@ pub trait P2pLunesImplLunes {
     fn all_order_owner(&mut self, page: u64) -> Result<(), ()>;
     #[ink(message, payable)]
     fn payment_penalty_user(&mut self, id: u64) -> Result<(), ()>;
+    #[ink(message)]
+    fn register_txid(&mut self, id: u64, txid:[u8; 32]) -> Result<(), ()>;
     
 }
