@@ -51,7 +51,7 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
     const confirmHandle = () => {
         let a = Number(amount) * 100000000
         props.order.email = email;
-        props.handleConfirm(props.order.id, a, props.order.email, amount, props.order.pair)
+        props.handleConfirm(props.order.id, a,email, props.order.email, amount, props.order.pair)
         props.handleClose()
     }
     return (

@@ -13,9 +13,10 @@ pub trait P2pLunesImplLunes {
         fee:Balance,
         pair: String,
         address_payment: String,
+        email:String
     ) -> Result<(), ()>;
     #[ink(message)]
-    fn cancel_order(&mut self, id: u64) -> Result<(), ()>;
+    fn cancel_order(&mut self, id: u64,  email:String) -> Result<(), ()>;
     #[ink(message)]
     fn buy_order(&mut self, id: u64, quantity: Balance) -> Result<(), ()>;
     #[ink(message)]

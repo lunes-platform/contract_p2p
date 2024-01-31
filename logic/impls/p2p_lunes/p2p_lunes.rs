@@ -24,7 +24,8 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         pair: String,
         erc20_address: [u8; 20],
         btc_address: Option<String>,
-        info_payment: Option<String>
+        info_payment: Option<String>,
+        email:Option<String>,
     ) -> Result<(), PSP22Error> {
         let mut total_sell = Self::env().transferred_value();
         if total_sell <= self.data::<Data>().min_sales {
@@ -53,6 +54,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             cencel: false,
             btc_address: btc_address,
             info_payment: info_payment,
+            email: email
         });
         self.data::<Data>().next_order_id += 1;
         Ok(())
@@ -80,7 +82,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
     /// Create buy order
     #[ink(message)]
     #[modifiers(non_reentrant)]
-    fn buy_order(&mut self, id: u64, quantity: Balance) -> Result<(), PSP22Error> {
+    fn buy_order(&mut self, id: u64, quantity: Balance,email:Option<String>) -> Result<(), PSP22Error> {
         let index = self
             .data::<Data>()
             .books.iter()
@@ -102,6 +104,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         let erc20_address = self.data::<Data>().books[index.unwrap()].erc20_address.clone();
         let btc_address = self.data::<Data>().books[index.unwrap()].btc_address.clone();
         let pair = self.data::<Data>().books[index.unwrap()].pair.clone();
+        let email_sall = self.data::<Data>().books[index.unwrap()].email.clone();
         self.data::<Data>().books[index.unwrap()].value = total_orderm - quantity;
         self.data::<Data>().buy_books.push(BuyBook {
             conflict: false,
@@ -120,6 +123,8 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             penalty: false,
             confirmed: false,
             txid_payment:None,
+            sell_owner:email_sall,
+            email:email
         });
         if self.data::<Data>().books[index.unwrap()].value <= 0 {
             self.data::<Data>().books.remove(index.unwrap());

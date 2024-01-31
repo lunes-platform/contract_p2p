@@ -617,7 +617,7 @@ const ContractService = () => {
     }
 
   }
-  const feeBuyOrderHandler = async (id: string, quantity: string) => {
+  const feeBuyOrderHandler = async (id: string, quantity: string,email:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -641,7 +641,8 @@ const ContractService = () => {
         storageDepositLimit: null
       },
       id,
-      quantity
+      quantity,
+      email
     )
 
     console.log('feeBuyOrderHandler', storageDeposit.toHuman())
@@ -662,7 +663,7 @@ const ContractService = () => {
     setFeeNetword(fee_)
   }
 
-  const buyOrderHandler = async (id: string, quantity: string,email_sell:string, price_total:string, pair:string) => {
+  const buyOrderHandler = async (id: string, quantity: string,email:string,email_sell:string, price_total:string, pair:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -686,7 +687,8 @@ const ContractService = () => {
           storageDepositLimit: null
         },
         id,
-        quantity
+        quantity,
+        email
       )
       await contract.tx['p2pLunesImpl::buyOrder']({
         gasLimit:gasRequired,

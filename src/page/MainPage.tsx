@@ -171,14 +171,14 @@ const MainPage = () => {
     setOrder(order_)
     let qty = (convertAmountLunes(order_?.value)) *100000000
     console.log(order_)
-    feeBuyOrderHandler(order_?.id, qty.toString())
+    feeBuyOrderHandler(order_?.id, qty.toString(), order_.email)
     setOpen(true)
   }
   const handleBuyClose = () => {
     setOpen(false);
   };
-  const handleConfirmOrderBuy = async (id: string, amount:string, email:string, total:string, pair:string) => {
-    await buyOrderHandler(id,amount, email,total, pair)
+  const handleConfirmOrderBuy = async (id: string, amount:string,email:string, email_sell:string, total:string, pair:string) => {
+    await buyOrderHandler(id,amount,email, email_sell,total, pair)
     setPageType("order")
   };
   const handleAllTraderUser = async () =>{
