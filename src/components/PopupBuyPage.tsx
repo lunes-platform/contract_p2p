@@ -15,47 +15,49 @@ type PopupProps = {
     handleClose: any,
     handleConfirm: any,
     handleBestPrice: any,
-    order:any,
-    feeNetWork:any
+    order: any,
+    feeNetWork: any
 }
 const PopupBuyPage = ({ ...props }: PopupProps) => {
     const [amount, setAmount] = React.useState("1000")
     const [amountList, setAmountList] = React.useState(assets.values_type)
     const [isConfirm, setIsConfirm] = React.useState(false)
-    React.useEffect(()=>{
-        if(props.order?.value){
-            let permList = assets.values_type.filter(el=>Number(el.value)<=convertAmountLunes(props.order?.value.toString()))
+    const [email, setEmail] = React.useState("")
+    React.useEffect(() => {
+        if (props.order?.value) {
+            let permList = assets.values_type.filter(el => Number(el.value) <= convertAmountLunes(props.order?.value.toString()))
             setAmountList(permList)
         }
-    },[props.order])
-    
-    React.useEffect(() => {
-        let v = Number(props.feeNetWork) ==0
-        setIsConfirm(v)
-    },[props.feeNetWork])
+    }, [props.order])
 
-    React.useEffect(()=>{       
-        if(!amount)
+    React.useEffect(() => {
+        let v = Number(props.feeNetWork) == 0
+        setIsConfirm(v)
+    }, [props.feeNetWork])
+
+    React.useEffect(() => {
+        if (!amount)
             setIsConfirm(true)
         else
-             setIsConfirm(false)
-    },[amount])
-    const getTotal = () =>{
+            setIsConfirm(false)
+    }, [amount])
+    const getTotal = () => {
         let price_ = convertAmountLunes(props.order.price)
         let amount_ = Number(amount)
         let tt = price_ * amount_
-        
+
         return tt || 0
     }
-    const confirmHandle =() =>{
+    const confirmHandle = () => {
         let a = Number(amount) * 100000000
-        props.handleConfirm(props.order.id,a)
+        props.order.email = email;
+        props.handleConfirm(props.order.id, a, props.order.email, amount, props.order.pair)
         props.handleClose()
     }
     return (
         <div>
             <DialogTitle sx={{ m: 0, p: 2 }} >
-               ID - {props.order.id} Buy LUNES 
+                ID - {props.order.id} Buy LUNES
             </DialogTitle>
             <IconButton
                 aria-label="close"
@@ -71,7 +73,7 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
             </IconButton>
             <DialogContent dividers>
 
-               {/*
+                {/*
                <div>
                     <Autocomplete
                         disablePortal
@@ -89,15 +91,26 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
                         renderInput={(params) => <TextField   {...params} label="Pair" />}
                     />
                 </div>
-               */ } 
+               */ }
                 <div>
                     <Autocomplete
                         disablePortal
-                        fullWidth                        
+                        fullWidth
                         onChange={(e, value: any) => setAmount(value?.value)}
                         value={getAmont(amount)}
                         options={amountList}
                         renderInput={(params) => <TextField   {...params} label="Amount" />}
+                    />
+                </div>
+                <div>
+                    <TextField
+                        label={`email address for notification`}
+                        fullWidth
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        type={"email"}
+
+                        variant="filled"
                     />
                 </div>
                 <div>Volume: {convertAmountLunes(props.order.value)} LUNES</div>
@@ -111,7 +124,7 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
                 <Button onClick={props.handleClose} variant="text">
                     Close
                 </Button>
-                <Button autoFocus color='primary' variant="contained" disabled={isConfirm} onClick={()=>confirmHandle()}>
+                <Button autoFocus color='primary' variant="contained" disabled={isConfirm} onClick={() => confirmHandle()}>
                     Confirm
                 </Button>
             </DialogActions>

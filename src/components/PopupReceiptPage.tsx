@@ -93,7 +93,7 @@ const PopupReceiptPage = ({ ...props }: PopupProps) => {
                 <Button onClick={props.handleClose} variant="text">
                     Close
                 </Button>
-                <Button hidden={props.enable} autoFocus color='primary' disabled={sendConfirm} variant="contained" onClick={()=>{props.handleConfirm(props.order.id,includ_link(receipt) ); props.handleClose()}}>
+                <Button hidden={props.enable} autoFocus color='primary' disabled={sendConfirm} variant="contained" onClick={()=>{props.handleConfirm(props.order.id,includ_link(receipt),props.order.sell_email,props.order.pair ); props.handleClose()}}>
                     Confirm
                 </Button>
             </DialogActions>

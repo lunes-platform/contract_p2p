@@ -11,7 +11,8 @@ const darkTheme = createTheme({
 });
 type HeaderProps = {
     info: any,
-    isReady: boolean
+    isReady: boolean,
+    onBack:any
 }
 const HeaderPage = ({ ...props }: HeaderProps) => {
     const [info_, setInfo_] = useState({trander:'',valume:''})
@@ -47,13 +48,16 @@ const HeaderPage = ({ ...props }: HeaderProps) => {
             <AppBar position="static" color="primary">
                 <Container maxWidth="xl" >
                     <Toolbar disableGutters>
-                       <img src={`favicon.png`} style={{ marginRight: "10px" }} />
-                        <Typography
-                            variant="h6"
-                            noWrap
-                        >
-                            LUNES  - P2P (BETA TEST)
-                        </Typography>
+                        <img onClick={()=>props.onBack("home")} src={`favicon.png`} style={{ marginRight: "10px" }} />
+                        <div onClick={()=>props.onBack("home")}>                          
+                            <Typography
+                                variant="h6"
+                                noWrap
+                            >
+                                LUNES  - P2P (BETA TEST)
+                            </Typography>
+                        </div>
+                       
                         {props.info.valume?(infoChange()):(<></>)}
                     </Toolbar>
                 </Container>

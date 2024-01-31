@@ -16,7 +16,7 @@ import BuyBook from "../models/BuyBook"
 import { BN } from '@polkadot/util/bn'
 import { formatBalance } from '@polkadot/util';
 const decimals = new BN('100000000')
-
+import {send_email, message_buy, message_receipt, mensagem_deposit} from '../utils/sendEmail'
 const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5ERbpJWSZbVqU8BYQCHyb9u8Z4Rk4xs3joCbSp29NX9j17kW'
 
 const ContractService = () => {
@@ -49,6 +49,25 @@ const ContractService = () => {
     setBalanceLunes(balance_fee.toString())
     setLoading(false)      
   }
+  const getUserNewBalance = async () =>{
+    if (!api || !apiReady) {
+      return
+    }
+    const injectedAccounts = await web3Accounts()
+    let user = account;
+    if (injectedAccounts.length > 0) {
+      injectedAccounts.forEach(async (el)=>{
+        if(user?.address == el.address){
+          setAccount(el)
+          const balanceL: any = await api.query.system.account(el?.address)
+          const balance_fee = convertAmountLunes(balanceL.data.free.toHuman()) - convertAmountLunes(balanceL.data.feeFrozen.toHuman())
+          setBalanceLunes(balance_fee.toString())
+        }
+      });
+      setAccounts(injectedAccounts)
+      
+    }
+  }
   const listenContract = () =>{
     if (!api || !apiReady) {
       return
@@ -62,8 +81,8 @@ const ContractService = () => {
               console.log('Evento detectado:', event.data.toString());
           }
           if (event.section === 'balances' && event.method === 'Transfer') {
-            if( event.data.toHuman().to == account?.address || event.data.toHuman().from == account?.address){
-              getBalance()
+            if( event.data.toHuman().to == account?.address || event.data.toHuman().from == account?.address){              
+              getUserNewBalance()
             }
         }
       });
@@ -309,7 +328,7 @@ const ContractService = () => {
       setOrderPenalty(object);
     }
   }
-  const feeNwtWorkOrderHandler = async (price_: string, fee: string, pair: string, erc20Address: string, btcAddress: string, infoPayment: string, amount: string) => {
+  const feeNwtWorkOrderHandler = async (price_: string, fee: string, pair: string, erc20Address: string, btcAddress: string, infoPayment: string, amount: string, email:string) => {
     if (!api || !apiReady) {
       return
     }
@@ -338,7 +357,8 @@ const ContractService = () => {
         pair,
         erc20Address,
         btcAddress,
-        infoPayment
+        infoPayment,
+        email
       )
 
       console.log('feeNwtWorkOrder', storageDeposit.toHuman().Charge)
@@ -365,8 +385,8 @@ const ContractService = () => {
 
   }
 
-
-  const createOrderHandler = async (price_: string, fee: string, pair: string, erc20Address: string, btcAddress: string, infoPayment: string, amount: string) => {
+  
+  const createOrderHandler = async (price_: string, fee: string, pair: string, erc20Address: string, btcAddress: string, infoPayment: string, amount: string,email:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -399,7 +419,8 @@ const ContractService = () => {
         pair,
         erc20Address,
         btcAddress,
-        infoPayment
+        infoPayment,
+        email
       )
 
       await contract.tx['p2pLunesImpl::createOrder']({
@@ -424,6 +445,7 @@ const ContractService = () => {
             infoTraded24hHandler()
             allOrderOwnerHandler("1")
             setLoading(false)
+            
           }
         })
     } catch (e) {
@@ -543,7 +565,7 @@ const ContractService = () => {
     setFeeNetword(fee_)
   }
 
-  const confirmSellHandler = async (id: string) => {
+  const confirmSellHandler = async (id: string,email_to:string, value:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -585,6 +607,8 @@ const ContractService = () => {
             setError("")
             setSuccessMsg("")           
             setSuccessMsg('Successfully payment!')
+            let txid = res.status.hash.toJSON(); 
+            send_email(email_to,"Deposit Notification:"+id, mensagem_deposit(id,value,txid))
           }
         })
     } catch {
@@ -638,7 +662,7 @@ const ContractService = () => {
     setFeeNetword(fee_)
   }
 
-  const buyOrderHandler = async (id: string, quantity: string) => {
+  const buyOrderHandler = async (id: string, quantity: string,email_sell:string, price_total:string, pair:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -681,6 +705,7 @@ const ContractService = () => {
             infoTraded24hHandler()
             buyBooksUserHandler("1")
             setLoading(false)
+            send_email(email_sell,"Confirmation of P2P Sales Cryptocurrency Transaction", message_buy(quantity,price_total,pair))
           }
         })
     } catch {
@@ -734,7 +759,7 @@ const ContractService = () => {
     setFeeNetword(fee_)
   }
 
-  const sendReceiptSellHandler = async (id: string, receipt: string) => {
+  const sendReceiptSellHandler = async (id: string, receipt: string, email_sell:string, pair:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -776,6 +801,7 @@ const ContractService = () => {
             setError("");
             setSuccessMsg("")           
             setSuccessMsg('Successfully sender receipt!')
+            send_email(email_sell,"Confirmation of  Receipt Cryptocurrency ID:"+id, message_receipt(id,receipt,pair))
             buyBooksUserHandler("1")
           }
         })

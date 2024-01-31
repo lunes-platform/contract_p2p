@@ -52,7 +52,7 @@ const PopupOpenConfirm = ({ ...props }: PopupProps) => {
                 <Button onClick={props.handleClose} variant="text">
                     Close
                 </Button>
-                <Button autoFocus color='primary' variant="contained" onClick={()=>{props.handleConfirm(props.order.id);props.handleClose()}}>
+                <Button autoFocus color='primary' variant="contained" onClick={()=>{props.handleConfirm(props.order.id, props.order.email,props.order.value);props.handleClose()}}>
                     Confirm
                 </Button>
             </DialogActions>

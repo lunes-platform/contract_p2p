@@ -24,7 +24,7 @@ const FooterPage = () => {
                                 textDecoration: 'none',
                             }}
                         >
-                            <div className="textLeft textLink" style={{ width: "100%" }}><a target='_blank' href='mailto:contact@lunes.io'>Support: contact@lunes.io</a></div>
+                            <div className="textLeft textLink" style={{ width: "100%" }}><a target='_blank' href='mailto:support@lunes.io'>Support: support@lunes.io</a></div>
                         </Typography>
                         <Typography
                             variant="h6"
@@ -37,7 +37,7 @@ const FooterPage = () => {
                                 textDecoration: 'none',
                             }}
                         >
-                            <div className="textLeft textLink" style={{ width: "100%" }}><a target='_blank' href='mailto:contact@lunes.io'>Support P2P</a></div>
+                            <div className="textLeft textLink" style={{ width: "100%" }}><a target='_blank' href='mailto:support@lunes.io'>Support P2P</a></div>
                         </Typography>
                         <Typography
                             variant="h6"

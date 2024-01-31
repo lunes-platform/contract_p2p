@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import FooterPage from "../components/FooterPage";
 import HeaderPage from "../components/HeaderPage";
@@ -150,10 +150,10 @@ const MainPage = () => {
     await connectWalletHandler();
   };
   const handleCreateOrder = async (order: any) => {
-    createOrderHandler(order.price, order.fee, order.pair, order.erc20_address, order.btc_address, order.info_payment, order.value)
+    createOrderHandler(order.price, order.fee, order.pair, order.erc20_address, order.btc_address, order.info_payment, order.value, order.email)
   };
   const handleFeeCreateOrder = async (order: any) => {
-    feeNwtWorkOrderHandler(order.price, order.fee, order.pair, order.erc20_address, order.btc_address, order.info_payment, order.value)
+    feeNwtWorkOrderHandler(order.price, order.fee, order.pair, order.erc20_address, order.btc_address, order.info_payment, order.value, order.email)
   };
   const handleCloseOrderCancelOwner = () => {
     setOrderCancelOwner(false)
@@ -177,8 +177,8 @@ const MainPage = () => {
   const handleBuyClose = () => {
     setOpen(false);
   };
-  const handleConfirmOrderBuy = async (id: string, amount:string) => {
-    await buyOrderHandler(id,amount)
+  const handleConfirmOrderBuy = async (id: string, amount:string, email:string, total:string, pair:string) => {
+    await buyOrderHandler(id,amount, email,total, pair)
     setPageType("order")
   };
   const handleAllTraderUser = async () =>{
@@ -285,6 +285,7 @@ const MainPage = () => {
       </Dialog>
       <HeaderPage 
         info={inf24h} 
+        onBack={setPageType}
         isReady={contractReady} />
 
       <Box
