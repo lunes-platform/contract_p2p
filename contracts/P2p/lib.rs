@@ -1,14 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std, no_main)]
 #[openbrush::implementation(Ownable)]
 #[openbrush::contract]
-pub mod p2p_lunes{
+pub mod p2p_lunes {
     use openbrush::{
-        contracts::{
-            ownable, reentrancy_guard, traits::psp22::PSP22Error
-        },
+        contracts::{ ownable, reentrancy_guard, traits::psp22::PSP22Error },
         traits::Storage,
     };
-    use p2p_lunes_pkg::impls::p2p_lunes::{p2p_lunes::*, data };
+    use p2p_lunes_pkg::impls::p2p_lunes::{ p2p_lunes::*, data };
 
     #[ink(storage)]
     #[derive(Default, Storage)]
@@ -28,7 +26,7 @@ pub mod p2p_lunes{
         #[ink(topic)]
         value: Balance, // Value
         #[ink(topic)]
-        id: u64,//Id order sell ou buy
+        id: u64, //Id order sell ou buy
     }
     impl P2pLunesImpl for P2pLunesContract {}
 
@@ -39,7 +37,6 @@ pub mod p2p_lunes{
             let caller = instance.env().caller();
             ownable::InternalImpl::_init_with_owner(&mut instance, caller);
 
-            let mut instance = Self::default();
             instance.payable_p2p.next_buy_id = 1;
             instance.payable_p2p.next_order_id = 1;
             instance.payable_p2p.fee_p2p = 3;
@@ -49,16 +46,22 @@ pub mod p2p_lunes{
             instance.payable_p2p.buy_books = Default::default();
             instance
         }
-          /// Set envent order
-          #[ink(message)]
-          pub fn set_envent_order(&self,type_order:u32,value:Balance, id:u64 ) -> Result<(),PSP22Error> {
+        /// Set envent order
+        #[ink(message)]
+        pub fn set_envent_order(
+            &self,
+            id: u64
+        ) -> Result<(), PSP22Error> {
+            if id == 0 {
+                return Err(PSP22Error::Custom("Error".into()));
+            }
+            
             self.env().emit_event(OrderEvent {
-                type_order,
-                value,
-                id
+                type_order: 1,
+                value: 1,
+                id: id,
             });
             Ok(())
-          }
+        }
     }
-   
 }

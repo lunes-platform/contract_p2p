@@ -83,6 +83,9 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
     #[ink(message)]
     #[modifiers(non_reentrant)]
     fn buy_order(&mut self, id: u64, quantity: Balance,email:Option<String>) -> Result<(), PSP22Error> {
+        if quantity <= self.data::<Data>().min_sales {
+            return Err(PSP22Error::Custom(LunesError::BadMintValue.as_str()));
+        }
         let index = self
             .data::<Data>()
             .books.iter()
@@ -123,8 +126,8 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             penalty: false,
             confirmed: false,
             txid_payment:None,
-            sell_owner:email_sall,
-            email:email
+            email: email,
+            sell_email:email_sall
         });
         if self.data::<Data>().books[index.unwrap()].value <= 0 {
             self.data::<Data>().books.remove(index.unwrap());

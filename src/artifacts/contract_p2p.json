@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x78ba72f43f60aea5f4e9a8f9a1cdefd71d2ef194e6f013a14c9c566709ea4e1f",
+    "hash": "0xbc260e528669c3e35a8fdb882e749d9b7f21754f577066e38672ae12529cecca",
     "language": "ink! 4.2.1",
     "compiler": "rustc 1.74.0",
     "build_info": {
@@ -56,7 +56,7 @@
         "displayName": [
           "BlockNumber"
         ],
-        "type": 17
+        "type": 36
       },
       "chainExtension": {
         "displayName": [
@@ -89,7 +89,7 @@
               "displayName": [
                 "u32"
               ],
-              "type": 17
+              "type": 36
             }
           },
           {
@@ -132,24 +132,6 @@
       {
         "args": [
           {
-            "label": "type_order",
-            "type": {
-              "displayName": [
-                "u32"
-              ],
-              "type": 17
-            }
-          },
-          {
-            "label": "value",
-            "type": {
-              "displayName": [
-                "Balance"
-              ],
-              "type": 1
-            }
-          },
-          {
             "label": "id",
             "type": {
               "displayName": [
@@ -171,9 +153,67 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
         "selector": "0x295a029f"
+      },
+      {
+        "args": [
+          {
+            "label": "page",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "BuyBooksUserInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " buy books user"
+        ],
+        "label": "P2pLunesImpl::buy_books_user",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 20
+        },
+        "selector": "0x144692ec"
+      },
+      {
+        "args": [
+          {
+            "label": "page",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "AllBooksInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " All books"
+        ],
+        "label": "P2pLunesImpl::all_books",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 22
+        },
+        "selector": "0x815cca45"
       },
       {
         "args": [
@@ -236,6 +276,16 @@
               ],
               "type": 9
             }
+          },
+          {
+            "label": "email",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "CreateOrderInput7"
+              ],
+              "type": 9
+            }
           }
         ],
         "default": false,
@@ -250,18 +300,18 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
         "selector": "0xcfcb7b92"
       },
       {
         "args": [
           {
-            "label": "fee",
+            "label": "id",
             "type": {
               "displayName": [
                 "p2plunesimpl_external",
-                "UpdateFeeInput1"
+                "OpenConflictUserInput1"
               ],
               "type": 0
             }
@@ -269,9 +319,9 @@
         ],
         "default": false,
         "docs": [
-          " Update fee p2p"
+          " Open conflict user"
         ],
-        "label": "P2pLunesImpl::update_fee",
+        "label": "P2pLunesImpl::open_conflict_user",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -279,9 +329,99 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
-        "selector": "0xb9da7cff"
+        "selector": "0x90827e8e"
+      },
+      {
+        "args": [
+          {
+            "label": "id",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "ConfirmSellInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Confirm sell order"
+        ],
+        "label": "P2pLunesImpl::confirm_sell",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 17
+        },
+        "selector": "0x66bb69fd"
+      },
+      {
+        "args": [
+          {
+            "label": "date_expire",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "UpdateExpireDayInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Update days"
+        ],
+        "label": "P2pLunesImpl::update_expire_day",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 17
+        },
+        "selector": "0x298b9781"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "P2pLunesImpl::info_contract",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 24
+        },
+        "selector": "0xec616510"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "P2pLunesImpl::info_traded24h",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 27
+        },
+        "selector": "0x220bb61c"
       },
       {
         "args": [
@@ -308,38 +448,17 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
         "selector": "0x47594d31"
       },
       {
-        "args": [
-          {
-            "label": "id",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "BuyOrderInput1"
-              ],
-              "type": 0
-            }
-          },
-          {
-            "label": "quantity",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "BuyOrderInput2"
-              ],
-              "type": 1
-            }
-          }
-        ],
+        "args": [],
         "default": false,
         "docs": [
-          " Create buy order"
+          "Get Payment penalty"
         ],
-        "label": "P2pLunesImpl::buy_order",
+        "label": "P2pLunesImpl::user_penalty",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -347,9 +466,38 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 29
         },
-        "selector": "0xa36867a8"
+        "selector": "0x4137f4a9"
+      },
+      {
+        "args": [
+          {
+            "label": "page",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "BuyBooksSellerInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Select buy book seller"
+        ],
+        "label": "P2pLunesImpl::buy_books_seller",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 20
+        },
+        "selector": "0x448bf109"
       },
       {
         "args": [
@@ -386,70 +534,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
         "selector": "0xd10640cc"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [],
-        "label": "P2pLunesImpl::info_traded24h",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 21
-        },
-        "selector": "0x220bb61c"
-      },
-      {
-        "args": [
-          {
-            "label": "page",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "GetConflictInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [],
-        "label": "P2pLunesImpl::get_conflict",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 23
-        },
-        "selector": "0x6ca5069a"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [
-          "Get Payment penalty"
-        ],
-        "label": "P2pLunesImpl::user_penalty",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 25
-        },
-        "selector": "0x4137f4a9"
       },
       {
         "args": [
@@ -458,7 +545,7 @@
             "type": {
               "displayName": [
                 "p2plunesimpl_external",
-                "OpenConflictSellerInput1"
+                "PaymentPenaltyUserInput1"
               ],
               "type": 0
             }
@@ -466,9 +553,38 @@
         ],
         "default": false,
         "docs": [
-          " Open conflict seller"
+          " Payment penalty"
         ],
-        "label": "P2pLunesImpl::open_conflict_seller",
+        "label": "P2pLunesImpl::payment_penalty_user",
+        "mutates": true,
+        "payable": true,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 17
+        },
+        "selector": "0x07497da2"
+      },
+      {
+        "args": [
+          {
+            "label": "fee",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "UpdateFeeInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Update fee p2p"
+        ],
+        "label": "P2pLunesImpl::update_fee",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -476,9 +592,38 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
-        "selector": "0x94d8311c"
+        "selector": "0xb9da7cff"
+      },
+      {
+        "args": [
+          {
+            "label": "id",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "CancelOrderInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Cencel Order Book"
+        ],
+        "label": "P2pLunesImpl::cancel_order",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 17
+        },
+        "selector": "0x62bb8a1d"
       },
       {
         "args": [
@@ -515,9 +660,124 @@
             "ink",
             "MessageResult"
           ],
-          "type": 27
+          "type": 22
         },
         "selector": "0x1fb80f1f"
+      },
+      {
+        "args": [
+          {
+            "label": "id",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "BuyOrderInput1"
+              ],
+              "type": 0
+            }
+          },
+          {
+            "label": "quantity",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "BuyOrderInput2"
+              ],
+              "type": 1
+            }
+          },
+          {
+            "label": "email",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "BuyOrderInput3"
+              ],
+              "type": 9
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Create buy order"
+        ],
+        "label": "P2pLunesImpl::buy_order",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 17
+        },
+        "selector": "0xa36867a8"
+      },
+      {
+        "args": [
+          {
+            "label": "id",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "OpenConflictSellerInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Open conflict seller"
+        ],
+        "label": "P2pLunesImpl::open_conflict_seller",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 17
+        },
+        "selector": "0x94d8311c"
+      },
+      {
+        "args": [
+          {
+            "label": "id",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "RegisterTxidInput1"
+              ],
+              "type": 0
+            }
+          },
+          {
+            "label": "txid",
+            "type": {
+              "displayName": [
+                "p2plunesimpl_external",
+                "RegisterTxidInput2"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "default": false,
+        "docs": [],
+        "label": "P2pLunesImpl::register_txid",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 17
+        },
+        "selector": "0xecaddb66"
       },
       {
         "args": [
@@ -526,17 +786,15 @@
             "type": {
               "displayName": [
                 "p2plunesimpl_external",
-                "BuyBooksUserInput1"
+                "GetConflictInput1"
               ],
               "type": 0
             }
           }
         ],
         "default": false,
-        "docs": [
-          " buy books user"
-        ],
-        "label": "P2pLunesImpl::buy_books_user",
+        "docs": [],
+        "label": "P2pLunesImpl::get_conflict",
         "mutates": true,
         "payable": false,
         "returnType": {
@@ -544,9 +802,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 23
+          "type": 20
         },
-        "selector": "0x144692ec"
+        "selector": "0x6ca5069a"
       },
       {
         "args": [
@@ -583,38 +841,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
         "selector": "0xe0e775d4"
-      },
-      {
-        "args": [
-          {
-            "label": "date_expire",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "UpdateExpireDayInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Update days"
-        ],
-        "label": "P2pLunesImpl::update_expire_day",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0x298b9781"
       },
       {
         "args": [
@@ -641,120 +870,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 18
+          "type": 17
         },
         "selector": "0x9be9086a"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [],
-        "label": "P2pLunesImpl::info_contract",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 29
-        },
-        "selector": "0xec616510"
-      },
-      {
-        "args": [
-          {
-            "label": "id",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "PaymentPenaltyUserInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Payment penalty"
-        ],
-        "label": "P2pLunesImpl::payment_penalty_user",
-        "mutates": true,
-        "payable": true,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0x07497da2"
-      },
-      {
-        "args": [
-          {
-            "label": "id",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "OpenConflictUserInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Open conflict user"
-        ],
-        "label": "P2pLunesImpl::open_conflict_user",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0x90827e8e"
-      },
-      {
-        "args": [
-          {
-            "label": "id",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "RegisterTxidInput1"
-              ],
-              "type": 0
-            }
-          },
-          {
-            "label": "txid",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "RegisterTxidInput2"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "default": false,
-        "docs": [],
-        "label": "P2pLunesImpl::register_txid",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0xecaddb66"
       },
       {
         "args": [
@@ -781,125 +899,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 27
+          "type": 22
         },
         "selector": "0xe80a1f2e"
-      },
-      {
-        "args": [
-          {
-            "label": "id",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "CancelOrderInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Cencel Order Book"
-        ],
-        "label": "P2pLunesImpl::cancel_order",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0x62bb8a1d"
-      },
-      {
-        "args": [
-          {
-            "label": "id",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "ConfirmSellInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Confirm sell order"
-        ],
-        "label": "P2pLunesImpl::confirm_sell",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 18
-        },
-        "selector": "0x66bb69fd"
-      },
-      {
-        "args": [
-          {
-            "label": "page",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "BuyBooksSellerInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " Select buy book seller"
-        ],
-        "label": "P2pLunesImpl::buy_books_seller",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 23
-        },
-        "selector": "0x448bf109"
-      },
-      {
-        "args": [
-          {
-            "label": "page",
-            "type": {
-              "displayName": [
-                "p2plunesimpl_external",
-                "AllBooksInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "default": false,
-        "docs": [
-          " All books"
-        ],
-        "label": "P2pLunesImpl::all_books",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 27
-        },
-        "selector": "0x815cca45"
       },
       {
         "args": [],
@@ -913,7 +915,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 32
+          "type": 31
         },
         "selector": "0x4fa43c8c"
       },
@@ -940,7 +942,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 34
+          "type": 33
         },
         "selector": "0x11f43efd"
       },
@@ -956,7 +958,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 34
+          "type": 33
         },
         "selector": "0x5e228753"
       }
@@ -1189,6 +1191,11 @@
                 "typeName": "Option<String>"
               },
               {
+                "name": "email",
+                "type": 9,
+                "typeName": "Option<String>"
+              },
+              {
                 "name": "cencel",
                 "type": 10,
                 "typeName": "bool"
@@ -1349,6 +1356,16 @@
                 "name": "owner",
                 "type": 4,
                 "typeName": "AccountId"
+              },
+              {
+                "name": "email",
+                "type": 9,
+                "typeName": "Option<String>"
+              },
+              {
+                "name": "sell_email",
+                "type": 9,
+                "typeName": "Option<String>"
               },
               {
                 "name": "sell_owner",
@@ -1528,20 +1545,12 @@
       "id": 17,
       "type": {
         "def": {
-          "primitive": "u32"
-        }
-      }
-    },
-    {
-      "id": 18,
-      "type": {
-        "def": {
           "variant": {
             "variants": [
               {
                 "fields": [
                   {
-                    "type": 19
+                    "type": 18
                   }
                 ],
                 "index": 0,
@@ -1562,7 +1571,7 @@
         "params": [
           {
             "name": "T",
-            "type": 19
+            "type": 18
           },
           {
             "name": "E",
@@ -1575,7 +1584,7 @@
       }
     },
     {
-      "id": 19,
+      "id": 18,
       "type": {
         "def": {
           "variant": {
@@ -1592,7 +1601,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 19
                   }
                 ],
                 "index": 1,
@@ -1608,7 +1617,7 @@
           },
           {
             "name": "E",
-            "type": 20
+            "type": 19
           }
         ],
         "path": [
@@ -1617,7 +1626,7 @@
       }
     },
     {
-      "id": 20,
+      "id": 19,
       "type": {
         "def": {
           "variant": {
@@ -1671,133 +1680,49 @@
       }
     },
     {
+      "id": 20,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 21
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 16
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 21
+          },
+          {
+            "name": "E",
+            "type": 16
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
       "id": 21,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 22
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 16
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 22
-          },
-          {
-            "name": "E",
-            "type": 16
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 22,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 1
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 20
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 1
-          },
-          {
-            "name": "E",
-            "type": 20
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 23,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 24
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 16
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 24
-          },
-          {
-            "name": "E",
-            "type": 16
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 24,
       "type": {
         "def": {
           "variant": {
@@ -1814,7 +1739,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 19
                   }
                 ],
                 "index": 1,
@@ -1830,7 +1755,133 @@
           },
           {
             "name": "E",
-            "type": 20
+            "type": 19
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 23
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 16
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 23
+          },
+          {
+            "name": "E",
+            "type": 16
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 2
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 19
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 2
+          },
+          {
+            "name": "E",
+            "type": 19
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 25
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 16
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 25
+          },
+          {
+            "name": "E",
+            "type": 16
           }
         ],
         "path": [
@@ -1856,7 +1907,7 @@
               {
                 "fields": [
                   {
-                    "type": 16
+                    "type": 19
                   }
                 ],
                 "index": 1,
@@ -1872,7 +1923,7 @@
           },
           {
             "name": "E",
-            "type": 16
+            "type": 19
           }
         ],
         "path": [
@@ -1884,41 +1935,42 @@
       "id": 26,
       "type": {
         "def": {
-          "variant": {
-            "variants": [
+          "composite": {
+            "fields": [
               {
-                "fields": [
-                  {
-                    "type": 12
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
+                "name": "fee_p2p",
+                "type": 0,
+                "typeName": "u64"
               },
               {
-                "fields": [
-                  {
-                    "type": 20
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
+                "name": "days_expire",
+                "type": 0,
+                "typeName": "u64"
+              },
+              {
+                "name": "next_buy_id",
+                "type": 0,
+                "typeName": "u64"
+              },
+              {
+                "name": "next_order_id",
+                "type": 0,
+                "typeName": "u64"
+              },
+              {
+                "name": "min_sales",
+                "type": 1,
+                "typeName": "Balance"
               }
             ]
           }
         },
-        "params": [
-          {
-            "name": "T",
-            "type": 12
-          },
-          {
-            "name": "E",
-            "type": 20
-          }
-        ],
         "path": [
-          "Result"
+          "p2p_lunes_pkg",
+          "impls",
+          "p2p_lunes",
+          "data",
+          "InfoContract"
         ]
       }
     },
@@ -1973,7 +2025,7 @@
               {
                 "fields": [
                   {
-                    "type": 2
+                    "type": 1
                   }
                 ],
                 "index": 0,
@@ -1982,7 +2034,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 19
                   }
                 ],
                 "index": 1,
@@ -1994,11 +2046,11 @@
         "params": [
           {
             "name": "T",
-            "type": 2
+            "type": 1
           },
           {
             "name": "E",
-            "type": 20
+            "type": 19
           }
         ],
         "path": [
@@ -2057,7 +2109,7 @@
               {
                 "fields": [
                   {
-                    "type": 31
+                    "type": 12
                   }
                 ],
                 "index": 0,
@@ -2066,7 +2118,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 19
                   }
                 ],
                 "index": 1,
@@ -2078,11 +2130,11 @@
         "params": [
           {
             "name": "T",
-            "type": 31
+            "type": 12
           },
           {
             "name": "E",
-            "type": 20
+            "type": 19
           }
         ],
         "path": [
@@ -2094,55 +2146,12 @@
       "id": 31,
       "type": {
         "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "fee_p2p",
-                "type": 0,
-                "typeName": "u64"
-              },
-              {
-                "name": "days_expire",
-                "type": 0,
-                "typeName": "u64"
-              },
-              {
-                "name": "next_buy_id",
-                "type": 0,
-                "typeName": "u64"
-              },
-              {
-                "name": "next_order_id",
-                "type": 0,
-                "typeName": "u64"
-              },
-              {
-                "name": "min_sales",
-                "type": 1,
-                "typeName": "Balance"
-              }
-            ]
-          }
-        },
-        "path": [
-          "p2p_lunes_pkg",
-          "impls",
-          "p2p_lunes",
-          "data",
-          "InfoContract"
-        ]
-      }
-    },
-    {
-      "id": 32,
-      "type": {
-        "def": {
           "variant": {
             "variants": [
               {
                 "fields": [
                   {
-                    "type": 33
+                    "type": 32
                   }
                 ],
                 "index": 0,
@@ -2163,7 +2172,7 @@
         "params": [
           {
             "name": "T",
-            "type": 33
+            "type": 32
           },
           {
             "name": "E",
@@ -2176,7 +2185,7 @@
       }
     },
     {
-      "id": 33,
+      "id": 32,
       "type": {
         "def": {
           "variant": {
@@ -2209,7 +2218,7 @@
       }
     },
     {
-      "id": 34,
+      "id": 33,
       "type": {
         "def": {
           "variant": {
@@ -2217,7 +2226,7 @@
               {
                 "fields": [
                   {
-                    "type": 35
+                    "type": 34
                   }
                 ],
                 "index": 0,
@@ -2238,7 +2247,7 @@
         "params": [
           {
             "name": "T",
-            "type": 35
+            "type": 34
           },
           {
             "name": "E",
@@ -2251,7 +2260,7 @@
       }
     },
     {
-      "id": 35,
+      "id": 34,
       "type": {
         "def": {
           "variant": {
@@ -2268,7 +2277,7 @@
               {
                 "fields": [
                   {
-                    "type": 36
+                    "type": 35
                   }
                 ],
                 "index": 1,
@@ -2284,7 +2293,7 @@
           },
           {
             "name": "E",
-            "type": 36
+            "type": 35
           }
         ],
         "path": [
@@ -2293,7 +2302,7 @@
       }
     },
     {
-      "id": 36,
+      "id": 35,
       "type": {
         "def": {
           "variant": {
@@ -2316,6 +2325,14 @@
           "ownable",
           "OwnableError"
         ]
+      }
+    },
+    {
+      "id": 36,
+      "type": {
+        "def": {
+          "primitive": "u32"
+        }
       }
     },
     {
