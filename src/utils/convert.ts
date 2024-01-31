@@ -31,7 +31,7 @@ const getPairLabel = (pair: string) => {
 const getPairType = (pair: string) => {
     if (!pair)
         return;
-    return assets.pair_options.find(e => e.type == pair)?.type
+    return assets.pair_options.find(e => e.type == pair)?.symbol
 }
 const getAmont = (value: string) => {
     if(!value)
@@ -53,4 +53,21 @@ const getTotalPayment = (price:string, amount:string) =>{
     
     return tt || 0
 }
-export {calc_fee, type_amount_lunes, getPair,getAmont, convertTimestamp,convertAmountLunes,getTotalPayment,getPairLabel,getPairType}
+const validate_address = (address:string, pair:string) =>{
+    var isErc20 = getPair(pair)
+    if(!isErc20){
+        return "invalid pair!"
+    }
+    if(!address)
+        return "invalid pair!"
+    var WAValidator = require('litecoin-address-validator');
+    console.log('valid :',isErc20.symbol)
+    if (isErc20.ERC_20 && (address.substring(0, 2) != "0x" || address.length<40))
+        return "Enter Address Erc20 valid!"   
+    else if (isErc20.IS_FAMILE_BTC)
+        return WAValidator.validate(address, isErc20.symbol)?null:"Enter Address valid!"
+    else
+        return null;
+}
+
+export {calc_fee, type_amount_lunes, getPair,getAmont, convertTimestamp,convertAmountLunes,getTotalPayment,getPairLabel,getPairType,validate_address}

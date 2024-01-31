@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Autocomplete, TextField } from '@mui/material';
 import assets from '../assets';
-import { convertAmountLunes, convertTimestamp, getAmont } from '../utils/convert';
+import { convertAmountLunes, convertTimestamp, getAmont, getPair, getPairLabel, getPairType, getTotalPayment } from '../utils/convert';
 import Timestamp from 'react-timestamp';
 
 type PopupProps = {
@@ -47,13 +47,6 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
         else
             setIsConfirm(false)
     }, [amount])
-    const getTotal = () => {
-        let price_ = convertAmountLunes(props.order.price)
-        let amount_ = Number(amount)
-        let tt = price_ * amount_
-
-        return tt || 0
-    }
     const confirmHandle = () => {
         let a = Number(amount) * 100000000
         props.order.email = email;
@@ -121,8 +114,8 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
                     />
                 </div>
                 <div>Volume: {convertAmountLunes(props.order.value)} LUNES</div>
-                <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
-                <div>Total: {getTotal()}  {props.order.pair}</div>
+                <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)}</div>
                 <div>Date expire to deposit:   {<Timestamp date={convertTimestamp(props.order.dateExpire)} />}</div>
                 <div style={{ color: "red" }}>Attention: Negotiations not completed result in a fine, confirm?</div>
             </DialogContent>

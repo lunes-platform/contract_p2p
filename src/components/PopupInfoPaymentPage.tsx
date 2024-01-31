@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { convertAmountLunes, convertTimestamp, getPairLabel } from '../utils/convert';
+import { convertAmountLunes, convertTimestamp, getPairLabel, getPairType, getTotalPayment } from '../utils/convert';
 import Timestamp from 'react-timestamp';
 import QRCode from 'react-qr-code';
 
@@ -15,13 +15,7 @@ type PopupProps = {
     order:any
 }
 const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
-    const getTotal = () =>{
-        let price_ = convertAmountLunes(props.order.price)
-        let amount_ = convertAmountLunes(props.order.value)
-        let tt = price_ * amount_
-        
-        return tt || 0
-    }
+   
     return (
         <div>
             <DialogTitle sx={{ m: 0, p: 2 }} >
@@ -54,7 +48,7 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
                 </div>
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
-                <div>Total: {getTotal()}  {props.order.pair}</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)} to payment</div>
                 <br/>
                 <div style={{background:"#DAE2ED"}}>{props.order.infoPayment}</div>
                 <br/>

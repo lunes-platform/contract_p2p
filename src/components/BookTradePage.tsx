@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import Order from "../models/Order";
 import Timestamp from "react-timestamp";
 import Identicon from "@polkadot/react-identicon";
-import { convertAmountLunes, convertTimestamp, getAmont, getPair, getPairLabel } from "../utils/convert";
+import { convertAmountLunes, convertTimestamp, getAmont, getPair, getPairLabel, getPairType, getTotalPayment, validate_address } from "../utils/convert";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -151,7 +151,8 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                     <TableRow>
                         <StyledTableCell>ID</StyledTableCell>
                         <StyledTableCell align="center">Pier</StyledTableCell>
-                        <StyledTableCell align="right">Price</StyledTableCell>
+                        <StyledTableCell align="right">Price Unit</StyledTableCell>
+                        <StyledTableCell align="right">Price Total</StyledTableCell>
                         <StyledTableCell align="right">Volume</StyledTableCell>
                         <StyledTableCell align="right">Time Expire</StyledTableCell>
                         <StyledTableCell align="right"></StyledTableCell>
@@ -164,7 +165,8 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                             <StyledTableCell align="center">
                                 {getPairLabel(row.pair)}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{convertAmountLunes(row.price)}</StyledTableCell>
+                            <StyledTableCell align="right">{convertAmountLunes(row.price)}  {getPairType(row.pair)}</StyledTableCell>
+                            <StyledTableCell align="right">{getTotalPayment(row.price,row.value)}  {getPairType(row.pair)}</StyledTableCell>
                             <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>
                             <StyledTableCell align="right">
                                 {<Timestamp date={convertTimestamp(row.dateExpire.toString())} />}
@@ -191,6 +193,15 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             </Table>
         )
     }
+    function validateAddress(address:string, pair:string): void {        
+        let valid:string = validate_address(address,pair) || ""
+        if(valid){
+            setErro(valid)
+            setAlert(true)
+        }
+            
+    }
+
     return (
         <div>
             <Grid spacing={0} container
@@ -240,12 +251,12 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 onChange={(e, value: any) => setOrder({ ...order, pair: value?.type })}
                                 value={getPair(order.pair)}
                                 options={assets.pair_options}
-                                renderInput={(params) => <TextField   {...params} label="Pair" />}
+                                renderInput={(params) => <TextField   {...params} label="Pair for P2P" />}
                             />
                         </div>
                         <div>
                             <TextField
-                                label={`Price`}
+                                label={order.pair?`Price unit in the pair ${order.pair}`:`Price unit`}
                                 placeholder="0.00000"
                                 value={order.price}
                                 onChange={(e) => setOrder({ ...order, price: e.target.value })}
@@ -257,10 +268,11 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                         <div>
 
                             <TextField
-                                label={`Address Payment`}
+                                label={order.pair?`Address Payment valid`:`Address Payment valid for ${order.pair}`}
                                 fullWidth
                                 value={iserc20 ? order.erc20_address : order.btc_address}
                                 onChange={(e) => setTypeAddress(e.target.value)}
+                                onBlur={()=>validateAddress((iserc20 ? order.erc20_address : order.btc_address),order.pair)}
                                 type={"text"}
                                 variant="filled"
                             />

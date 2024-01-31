@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { convertAmountLunes, convertTimestamp } from '../utils/convert';
+import { convertAmountLunes, convertTimestamp, getPairLabel, getPairType, getTotalPayment } from '../utils/convert';
 import Timestamp from 'react-timestamp';
 
 type PopupProps = {
@@ -53,8 +53,8 @@ const PopupConflitApprovPaymentPage = ({ ...props }: PopupProps) => {
                 
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold", margin:15}}>{props.order.btcAddress?props.order.btcAddress:props.order.erc20Address}</div>
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
-                <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
-                <div>Total: {getTotal()}  {props.order.pair}</div>
+                <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)}</div>
                 <br/>
                 <div style={{background:"#DAE2ED"}}>{props.order.info_payment}</div>
                 <br/>

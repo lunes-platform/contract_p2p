@@ -86,7 +86,7 @@ const MyOrdersPage = ({ ...props }: BookTradeProps) => {
                     <TableRow>
                         <StyledTableCell>ID</StyledTableCell>
                         <StyledTableCell align="center">Pier</StyledTableCell>
-                        <StyledTableCell align="right">Price</StyledTableCell>
+                        <StyledTableCell align="right">Price Uni.</StyledTableCell>
                         <StyledTableCell align="right">reserved Amount</StyledTableCell>
                         <StyledTableCell align="right">Payment Amount</StyledTableCell>
                         <StyledTableCell align="right">Time Expire payment</StyledTableCell>
