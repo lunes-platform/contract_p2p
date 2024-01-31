@@ -58,6 +58,12 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
     const [erro, setErro] = useState("")
     const [alert, setAlert] = useState(false)
     const [isHavebalance, setIsHavebalance] = useState(true)
+    useEffect(()=>{
+        let email_local = sessionStorage.getItem("email")
+        if(email_local)
+            setOrder({ ...order, email: email_local })
+    }, [])
+
     useEffect(() => {
         if (order.value) {
             const t = (Number(order.value) * Number(props.info.feeP2p)) / 100
@@ -117,7 +123,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             setAlert(true);
             return;
         }
-
+        sessionStorage.setItem("email",order.email)
         props.clickCreateOrder(order)
         setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "",price:"", value: "1000", email:'' })
     }

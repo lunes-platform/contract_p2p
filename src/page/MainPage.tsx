@@ -150,9 +150,11 @@ const MainPage = () => {
     await connectWalletHandler();
   };
   const handleCreateOrder = async (order: any) => {
+    console.log('create',order)
     createOrderHandler(order.price, order.fee, order.pair, order.erc20_address, order.btc_address, order.info_payment, order.value, order.email)
   };
   const handleFeeCreateOrder = async (order: any) => {
+    console.log('fee',order)
     feeNwtWorkOrderHandler(order.price, order.fee, order.pair, order.erc20_address, order.btc_address, order.info_payment, order.value, order.email)
   };
   const handleCloseOrderCancelOwner = () => {

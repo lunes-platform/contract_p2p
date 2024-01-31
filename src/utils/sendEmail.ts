@@ -1,18 +1,29 @@
 import axios from "axios";
 
 const send_email = (email: string, subject: string, msg: string) => {
-    const form = new FormData();
-    let from_: string = process.env.REACT_APP_CONTRACT_ADDRESS || ""
-    let key_: string = process.env.REACT_APP_EMAIL_KEY || ""
-    let cc_: string = process.env.REACT_APP_EMAIL_CC || ""
-    form.append('email_to', email);
-    form.append('key', key_);
-    form.append('cc_email', cc_);
-    form.append('from', from_);
-    form.append('subject', subject);
-    form.append('message', msg);
-
-    axios.post('https://zacksys.com.br/mail/sendmail.php', form)
+    try{
+        const form = new FormData();
+        let from_: string = process.env.REACT_APP_CONTRACT_ADDRESS || ""
+        let key_: string = process.env.REACT_APP_EMAIL_KEY || ""
+        let cc_: string = process.env.REACT_APP_EMAIL_CC || ""
+        form.append('email_to', email);
+        form.append('key', key_);
+        form.append('cc_email', cc_);
+        form.append('from', from_);
+        form.append('subject', subject);
+        form.append('message', msg);
+    
+        axios.post('/email.php', form,{
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Origin': '*'
+              }
+        })
+    }catch(e){
+        console.log(e)
+    }
+   
 }
 const message_buy = (value: string,price:string, pair: string) => {
     return (
@@ -81,7 +92,7 @@ return(
     
         <p>This deposit will be reflected in your account statement. Please review your account to verify the details.</p>
     
-        <p>If you have any questions or concerns regarding this deposit, please feel free to contact our support team at supp.</p>
+        <p>If you have any questions or concerns regarding this deposit, please feel free to contact our support team at support@lunes.io .</p>
     
         <p>Thank you for your continued trust inL UNES. We appreciate your business.</p>
     
@@ -123,7 +134,7 @@ const mensagem_deposit = (value:string,txid: string, id: string) => {
         
             <p>This deposit will be reflected in your account statement. Please review your account to verify the details.</p>
         
-            <p>If you have any questions or concerns regarding this deposit, please feel free to contact our support team at supp.</p>
+            <p>If you have any questions or concerns regarding this deposit, please feel free to contact our support team at support@lunes.io.</p>
         
             <p>Thank you for your continued trust inL UNES. We appreciate your business.</p>
         

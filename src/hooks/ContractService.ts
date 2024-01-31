@@ -18,7 +18,7 @@ import { BN } from '@polkadot/util/bn'
 import { formatBalance } from '@polkadot/util';
 const decimals = new BN('100000000')
 
-const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5ERbpJWSZbVqU8BYQCHyb9u8Z4Rk4xs3joCbSp29NX9j17kW'
+const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5G3VfP36indbUdwLqPggkdbyfJfZg5ZpKyiT3HuD4Wg6tyzG'
 
 const ContractService = () => {
   const { api, apiReady } = useContext(ApiContext)
@@ -44,7 +44,7 @@ const ContractService = () => {
   }, [api, apiReady, account])
   const getBalance = async () => {
     if (!api || !apiReady || !account) return
-
+    console.log("ades contract", process.env.REACT_APP_CONTRACT_ADDRESS)
     const balanceL: any = await api.query.system.account(account?.address)
     const balance_fee = convertAmountLunes(balanceL.data.free.toHuman()) - convertAmountLunes(balanceL.data.feeFrozen.toHuman())
     setBalanceLunes(balance_fee.toString())
@@ -387,7 +387,7 @@ const ContractService = () => {
   }
 
   
-  const createOrderHandler = async (price_: string, fee: string, pair: string, erc20Address: string, btcAddress: string, infoPayment: string, amount: string,email:string) => {
+  const createOrderHandler = async  (price_: string, fee: string, pair: string, erc20Address: string, btcAddress: string, infoPayment: string, amount: string, email:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -406,7 +406,6 @@ const ContractService = () => {
     setLoading(true)
     const gasLimit: any = getGasLimit(api)
     try {
-
       //Estimativa do gas 
       const { gasRequired }: any = await contract.query['p2pLunesImpl::createOrder'](
         account.address,
@@ -434,7 +433,8 @@ const ContractService = () => {
         pair,
         erc20Address,
         btcAddress,
-        infoPayment)
+        infoPayment,
+        email)
         .signAndSend(account.address, (res) => {
           if (res.status.isInBlock) {
             console.log('in a block')
@@ -609,7 +609,7 @@ const ContractService = () => {
             setSuccessMsg("")           
             setSuccessMsg('Successfully payment!')
             let txid = res.status.hash.toJSON(); 
-            send_email(email_to,"Deposit Notification:"+id, mensagem_deposit(id,value,txid))
+            send_email(email_to,"Deposit Notification:"+id, mensagem_deposit(value,txid,id))
           }
         })
     } catch {
@@ -696,7 +696,8 @@ const ContractService = () => {
         storageDepositLimit: null
       },
         id,
-        quantity)
+        quantity,
+        email)
         .signAndSend(account.address, (res) => {
           if (res.status.isInBlock) {
             console.log('in a block')
@@ -1205,8 +1206,6 @@ const ContractService = () => {
       {
         gasLimit,
       },
-      1,
-      1,
       1
     )
     if (result.isErr) {

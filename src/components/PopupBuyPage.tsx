@@ -23,6 +23,12 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
     const [amountList, setAmountList] = React.useState(assets.values_type)
     const [isConfirm, setIsConfirm] = React.useState(false)
     const [email, setEmail] = React.useState("")
+    React.useEffect(()=>{
+        let email_local = sessionStorage.getItem("email")
+        if(email_local)
+            setEmail(email_local)
+    }, [])
+
     React.useEffect(() => {
         if (props.order?.value) {
             let permList = assets.values_type.filter(el => Number(el.value) <= convertAmountLunes(props.order?.value.toString()))
@@ -51,7 +57,8 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
     const confirmHandle = () => {
         let a = Number(amount) * 100000000
         props.order.email = email;
-        props.handleConfirm(props.order.id, a,email, props.order.email, amount, props.order.pair)
+        sessionStorage.setItem("email",email)
+        props.handleConfirm(props.order.id, a,email, props.order.sellOwner, amount, props.order.pair)
         props.handleClose()
     }
     return (
