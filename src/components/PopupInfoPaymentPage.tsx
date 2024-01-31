@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { convertAmountLunes, convertTimestamp } from '../utils/convert';
+import { convertAmountLunes, convertTimestamp, getPairLabel } from '../utils/convert';
 import Timestamp from 'react-timestamp';
 import QRCode from 'react-qr-code';
 
@@ -53,10 +53,10 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
                  */}
                 </div>
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
-                <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
+                <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
                 <div>Total: {getTotal()}  {props.order.pair}</div>
                 <br/>
-                <div style={{background:"#DAE2ED"}}>{props.order.info_payment}</div>
+                <div style={{background:"#DAE2ED"}}>{props.order.infoPayment}</div>
                 <br/>
                 <div style={{color:"red"}}>Date expire to deposit: <Timestamp date={convertTimestamp(props.order.dateExpire)} /></div>
             </DialogContent>

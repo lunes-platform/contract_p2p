@@ -609,7 +609,7 @@ const ContractService = () => {
             setSuccessMsg("")           
             setSuccessMsg('Successfully payment!')
             let txid = res.status.hash.toJSON(); 
-            send_email(email_to,"Deposit Notification:"+id, mensagem_deposit(value,txid,id))
+            send_email(email_to,"Deposit Notification:"+id, mensagem_deposit(convertAmountLunes(value).toString(),txid,id))
           }
         })
     } catch {
@@ -709,7 +709,7 @@ const ContractService = () => {
             infoTraded24hHandler()
             buyBooksUserHandler("1")
             setLoading(false)
-            send_email(email_sell,"Confirmation of P2P Sales Cryptocurrency Transaction", message_buy(quantity,price_total,pair))
+            send_email(email_sell,"Confirmation of P2P Sales Cryptocurrency Transaction", message_buy(convertAmountLunes(quantity).toString(),price_total,pair))
           }
         })
     } catch {

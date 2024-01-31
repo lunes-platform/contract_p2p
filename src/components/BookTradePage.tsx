@@ -125,7 +125,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
         }
         sessionStorage.setItem("email",order.email)
         props.clickCreateOrder(order)
-        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "",price:"", value: "1000", email:'' })
+        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "",price:"", value: "1000" })
     }
     const setTypeAddress = (address: string) => {
         const key = getPair(order.pair)

@@ -31,10 +31,7 @@ const PopupReceiptPage = ({ ...props }: PopupProps) => {
         else
             setSendconfirm(false)
     },[receipt])
-    React.useEffect(() => {
-        let v = Number(props.feeNetWork) ==0
-        setSendconfirm(v)
-    },[props.feeNetWork])
+
     React.useEffect(()=>{
         if(props.order.receipt){
             let lik = props.order.receipt.toString().split(":");
