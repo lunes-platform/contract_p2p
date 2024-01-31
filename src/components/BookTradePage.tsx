@@ -109,13 +109,17 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             isErro = true
             setErro("Enter Amount")
         }
+        if (!isErro && (!order.email)) {
+            isErro = true
+            setErro("Enter email")
+        }
         if (isErro) {
             setAlert(true);
             return;
         }
 
         props.clickCreateOrder(order)
-        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "",price:"", value: "1000" })
+        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "",price:"", value: "1000", email:'' })
     }
     const setTypeAddress = (address: string) => {
         const key = getPair(order.pair)
@@ -265,6 +269,17 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 type={"text"}
                                 variant="filled"
                             />
+                        </div>
+                        <div>
+                        <TextField
+                            label={`email address for notification`}
+                            fullWidth
+                            value={order.email}
+                            onChange={(e) => setOrder({ ...order, email: e.target.value })}
+                            type={"email"}
+
+                            variant="filled"
+                                />
                         </div>
                         <div>
                             <Autocomplete

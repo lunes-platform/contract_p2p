@@ -6,6 +6,7 @@ import {
   web3Accounts,
   web3FromSource,
 } from '@polkadot/extension-dapp'
+import {send_email, message_buy, message_receipt, mensagem_deposit} from '../utils/sendEmail'
 import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { ApiPromise } from '@polkadot/api'
 import { ContractPromise } from '@polkadot/api-contract'
@@ -16,7 +17,7 @@ import BuyBook from "../models/BuyBook"
 import { BN } from '@polkadot/util/bn'
 import { formatBalance } from '@polkadot/util';
 const decimals = new BN('100000000')
-import {send_email, message_buy, message_receipt, mensagem_deposit} from '../utils/sendEmail'
+
 const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5ERbpJWSZbVqU8BYQCHyb9u8Z4Rk4xs3joCbSp29NX9j17kW'
 
 const ContractService = () => {

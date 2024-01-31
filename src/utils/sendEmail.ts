@@ -12,7 +12,7 @@ const send_email = (email: string, subject: string, msg: string) => {
     form.append('subject', subject);
     form.append('message', msg);
 
-    axios.post('email.php', form)
+    axios.post('https://zacksys.com.br/mail/sendmail.php', form)
 }
 const message_buy = (value: string,price:string, pair: string) => {
     return (
@@ -43,7 +43,7 @@ const message_buy = (value: string,price:string, pair: string) => {
 
             <p>This transaction will be reflected in your statement and may take some time to be fully processed. Please make sure to check your account to confirm the details.</p>
 
-            <p>If you have any questions or need further assistance, our support team is available to help. Contact us at [Insert Contact Details] or reply to this email.</p>
+            <p>If you have any questions or need further assistance, our support team is available to help. Contact us at support@lunes.io or reply to this email.</p>
 
             <p>Thank you again for choosing our services. We are committed to providing you with a secure and efficient experience in your P2P cryptocurrency transactions.</p>
 

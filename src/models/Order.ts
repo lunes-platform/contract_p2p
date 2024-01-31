@@ -4,6 +4,7 @@ class Order {
     public price: string =""
     public pair: string =""
     public fee: string = ""
+    public email: string = ""
     public date_expire: number =0
     public date_created: number =0
     public cencel: boolean =false
