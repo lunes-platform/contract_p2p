@@ -20,13 +20,12 @@ pub mod p2p_lunes {
     }
     /// Event emitted when a order create
     #[ink(event)]
+    #[ink(anonymous)]
     pub struct OrderEvent {
         #[ink(topic)]
-        type_order: u32, //1 = Buy - 2 = Sall
-        #[ink(topic)]
-        value: Balance, // Value
-        #[ink(topic)]
         id: u64, //Id order sell ou buy
+        type_order: u32, //1 = Buy - 2 = Sall
+        value: Balance, // Value       
     }
     impl P2pLunesImpl for P2pLunesContract {}
 

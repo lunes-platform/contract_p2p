@@ -58,6 +58,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
     const [erro, setErro] = useState("")
     const [alert, setAlert] = useState(false)
     const [isHavebalance, setIsHavebalance] = useState(true)
+    const [infoInvalid, setInfoInvalid] = useState(false)
     useEffect(()=>{
         let email_local = sessionStorage.getItem("email")
         if(email_local)
@@ -139,6 +140,21 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             setOrder({ ...order, btc_address: address, erc20_address: "0x0000000000000000000000000000000000000000", decimal: key.DECIMAL })
         }
     }
+    function validateAddress(address:string, pair:string): void {        
+        let valid:string = validate_address(address,pair) || ""
+        if(valid){
+            setErro(valid)
+            setAlert(true)
+            setInfoInvalid(true)
+        }else
+            setInfoInvalid(false)
+            
+        console.log(isHavebalance || infoInvalid)
+        console.log("isHavebalance ",isHavebalance )
+        console.log("infoInvalid",infoInvalid)
+        console.log("valid",valid)
+    }
+
     const getBooks = () => {
         if (!props.books)
             return (<></>)
@@ -193,15 +209,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             </Table>
         )
     }
-    function validateAddress(address:string, pair:string): void {        
-        let valid:string = validate_address(address,pair) || ""
-        if(valid){
-            setErro(valid)
-            setAlert(true)
-        }
-            
-    }
-
+   
     return (
         <div>
             <Grid spacing={0} container
@@ -317,7 +325,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                             <Button
                                 variant="contained"
                                 fullWidth
-                                disabled={isHavebalance}
+                                disabled={isHavebalance || infoInvalid}
                                 onClick={() => saveOrderHandler()}
                             >Create Order</Button>
                         </div>

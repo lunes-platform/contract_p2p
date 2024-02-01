@@ -53,6 +53,7 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
                 <div style={{background:"#DAE2ED"}}>{props.order.infoPayment}</div>
                 <br/>
                 <div style={{color:"red"}}>Date expire to deposit: <Timestamp date={convertTimestamp(props.order.dateExpire)} /></div>
+                <div style={{ color: "red" }}>Attention: Negotiations not completed result in a fine, confirm?</div>
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleClose} variant="text">
