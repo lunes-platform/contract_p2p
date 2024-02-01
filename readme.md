@@ -1,6 +1,6 @@
-# P2p Lunes
+# OTC Lunes
 
-The P2P Lunes project is a decentralized initiative that enables the trading of crypto assets Lunes through smart contracts, accepting any type of currency. In the event of a conflict between P2P parties, it will be necessary to open a dispute, subject to a small fee for mediation.
+The OTC Lunes project is a decentralized initiative that enables the trading of crypto assets Lunes through smart contracts, accepting any type of currency. In the event of a conflict between OTC parties, it will be necessary to open a dispute, subject to a small fee for mediation.
 
 ## About the Project
 

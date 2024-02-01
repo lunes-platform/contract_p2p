@@ -6,7 +6,7 @@ import {
   web3Accounts,
   web3FromSource,
 } from '@polkadot/extension-dapp'
-import {send_email, message_buy, message_receipt, mensagem_deposit} from '../utils/sendEmail'
+import {send_email, message_buy, message_receipt, mensagem_deposit, open_conflit_p2p} from '../utils/sendEmail'
 import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { ApiPromise } from '@polkadot/api'
 import { ContractPromise } from '@polkadot/api-contract'
@@ -17,9 +17,9 @@ import BuyBook from "../models/BuyBook"
 import { BN } from '@polkadot/util/bn'
 import { formatBalance } from '@polkadot/util';
 const decimals = new BN('100000000')
-
+const EMAIL_CONFLIT:string = process.env.REACT_APP_EMAIL_FIN || ""
 const CONTRACT_ADDRESS: string = process.env.REACT_APP_CONTRACT_ADDRESS || '5G3VfP36indbUdwLqPggkdbyfJfZg5ZpKyiT3HuD4Wg6tyzG'
-
+var is_ready = false;
 const ContractService = () => {
   const { api, apiReady } = useContext(ApiContext)
   const [error, setError] = useState('')
@@ -83,11 +83,26 @@ const ContractService = () => {
           }
           if (event.section === 'balances' && event.method === 'Transfer') {
             if( event.data.toHuman().to == account?.address || event.data.toHuman().from == account?.address){              
-              getUserNewBalance()
+              getUserNewBalance()             
             }
-        }
+            
+          }
+          if(event.section == 'transactionPayment'){
+            loadingContract()
+          }
+          
       });
   });
+  }
+  const loadingContract = async () =>{
+    if(!is_ready){
+      //is_ready = true;
+      await infoTraded24hHandler()
+      await allBooksHandler("1")   
+     // is_ready = false;
+      console.log("is_ready", is_ready)
+
+    }
   }
   useEffect(() => {
     if (apiReady)
@@ -858,7 +873,7 @@ const ContractService = () => {
     console.log(fee_)
     setFeeNetword(fee_)
   }
-  const openConflictSellerHandler  = async (id: string) => {
+  const openConflictSellerHandler  = async (id: string, date_expire:string, value:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -899,6 +914,7 @@ const ContractService = () => {
             setError("")
             setSuccessMsg("")           
             setSuccessMsg('Successfully open Dispute/Conflict!')
+            send_email(EMAIL_CONFLIT,"Conflit OTC", open_conflit_p2p(id,date_expire, value))
           }
         })
     } catch {
@@ -949,7 +965,7 @@ const ContractService = () => {
     console.log(fee_)
     setFeeNetword(fee_)
   }
-  const openConflictUserHandler  = async (id: string) => {
+  const openConflictUserHandler  = async (id: string,date_expire:string, value:string) => {
     if (!api || !apiReady) {
       setError('The API is not ready')
       return
@@ -990,6 +1006,7 @@ const ContractService = () => {
             setError("")
             setSuccessMsg("")           
             setSuccessMsg('Successfully open Dispute/Conflict!')
+            send_email(EMAIL_CONFLIT,"Conflit OTC", open_conflit_p2p(id,date_expire, value))
           }
         })
     } catch {

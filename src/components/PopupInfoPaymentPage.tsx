@@ -19,7 +19,7 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
     return (
         <div>
             <DialogTitle sx={{ m: 0, p: 2 }} >
-               ID {props.order.id} - My P2P LUNES
+               ID {props.order.id} - My OTC LUNES
             </DialogTitle>
             <IconButton
                 aria-label="close"

@@ -32,9 +32,9 @@ const PopupOpenConflit = ({ ...props }: PopupProps) => {
     }, [])
     const confirm = () =>{
         if(props.account.address==props.order.sellOwner){
-            props.handleSallerConfirm(props.order.id);
+            props.handleSallerConfirm(props.order.id, props.order.dateExpire, props.order.value);
         }else{
-            props.handleUserConfirm(props.order.id);
+            props.handleUserConfirm(props.order.id, props.order.dateExpire, props.order.value);
         }
         props.handleClose()
     } 
@@ -61,7 +61,7 @@ const PopupOpenConflit = ({ ...props }: PopupProps) => {
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
                 <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)}</div>
-                <div>Fee P2P: {props.info.feeP2p}%</div>
+                <div>Fee OTC: {props.info.feeP2p}%</div>
                 <br/>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Attention</div>
                 <div style={{textAlign:"center",fontSize:18, fontWeight:"bold"}}>Your Receivid case win</div>

@@ -191,7 +191,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 props.account?.address == row.owner?
                                 (
                                     <StyledTableCell align="right">
-                                        <Button onClick={()=>props.clickSelectCancel(row)}>CENCEL</Button>
+                                        <Button onClick={()=>props.clickSelectCancel(row)}>CANCEL</Button>
                                     </StyledTableCell>
                                 )
                                 :
@@ -260,7 +260,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 onChange={(e, value: any) => setOrder({ ...order, pair: value?.type })}
                                 value={getPair(order.pair)}
                                 options={assets.pair_options}
-                                renderInput={(params) => <TextField   {...params} label="Pair for P2P" />}
+                                renderInput={(params) => <TextField   {...params} label="Pair for OTC" />}
                             />
                         </div>
                         <div>
@@ -318,9 +318,9 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 renderInput={(params) => <TextField   {...params} label="Amount" />}
                             />
                         </div>
-                        <div>Fee P2P: {props.info.feeP2p}%</div>
+                        <div>Fee OTC: {props.info.feeP2p}%</div>
                         <div>Fee Network: {props.feeNetwork} LUNES</div>
-                        <div style={{ textAlign: "center", fontSize: 18, fontWeight: "bold" }}>Amount + Fee P2P: {total} LUNES</div>
+                        <div style={{ textAlign: "center", fontSize: 18, fontWeight: "bold" }}>Amount + Fee OTC: {total} LUNES</div>
                         <div>Time Expire: <Timestamp date={props.info.daysExpire.toString().substring(0, 10)} /> </div>
                         <div>
                             <Button

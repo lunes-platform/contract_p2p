@@ -31,12 +31,12 @@ const HeaderPage = ({ ...props }: HeaderProps) => {
             
                     <div style={{ float: 'right', marginLeft: '10px' }}>
                         <div className='boxInfoHeader'>
-                            Traded: {info_.trander} LUNES IN 24h
+                        Trading Activity: {info_.trander} LUNES IN 24h
                         </div>
                     </div>
                     <div style={{ float: 'right', marginLeft: '10px' }}>
                         <div className='boxInfoHeader'>
-                            Valume: {info_.valume}
+                            Volume: {info_.valume}
                         </div>
                     </div>
             </Typography>
@@ -54,7 +54,7 @@ const HeaderPage = ({ ...props }: HeaderProps) => {
                                 variant="h6"
                                 noWrap
                             >
-                                LUNES  - P2P (BETA TEST)
+                                LUNES  - OTC (BETA TEST)
                             </Typography>
                         </div>
                        

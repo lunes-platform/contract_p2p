@@ -20,7 +20,7 @@ const PopupOpenCancelOwner = ({ ...props }: PopupProps) => {
     return (
         <div>
             <DialogTitle sx={{ m: 0, p: 2 }} >
-                ID: {props.order.id}- Cancel P2P
+                ID: {props.order.id}- Cancel OTC
             </DialogTitle>
             <IconButton
                 aria-label="close"
