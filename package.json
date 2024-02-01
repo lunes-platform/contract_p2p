@@ -30,7 +30,8 @@
     "react-timestamp": "^6.0.0",
     "styled-components": "^5.3.6",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "nft.storage": "^7.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

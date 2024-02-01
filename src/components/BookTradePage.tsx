@@ -222,7 +222,8 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                     padding: 10,
                 }}>
                     <div className="boxInfoHeader" style={{ padding: 20, marginBottom: 50 }}>
-                        <div>Your Balnace:{props.balance} LUNES</div>
+                        <div style={{fontSize:20, fontWeight:"bold"}}>Create sales order in LUNES only</div>
+                        <div>Your Balnace:{props.balance} LUNES</div>                        
                         <div>
                             <InputLabel>Select Account</InputLabel>
                             <Select
