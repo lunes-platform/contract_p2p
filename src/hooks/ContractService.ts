@@ -358,7 +358,7 @@ const ContractService = () => {
       return
     }
     try {
-      const price = Number(price_) * 100000000
+      const price = Number(price_) * 10000000000
       const gasLimit: any = getGasLimit(api)
       //Estimativa do gas 
       const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::createOrder'](
@@ -417,7 +417,7 @@ const ContractService = () => {
       return
     }
 
-    const price = Number(price_) * 100000000
+    const price = Number(price_) * 10000000000
     setLoading(true)
     const gasLimit: any = getGasLimit(api)
     try {
