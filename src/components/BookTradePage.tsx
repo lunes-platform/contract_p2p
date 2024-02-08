@@ -40,7 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 type BookTradeProps = {
     books: any,
     clickSelectBuy: any,
-    clickSelectCancel:any
+    clickSelectCancel: any
     balance: string,
     info: any,
     clickCreateOrder: any,
@@ -59,9 +59,9 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
     const [alert, setAlert] = useState(false)
     const [isHavebalance, setIsHavebalance] = useState(true)
     const [infoInvalid, setInfoInvalid] = useState(false)
-    useEffect(()=>{
+    useEffect(() => {
         let email_local = sessionStorage.getItem("email")
-        if(email_local)
+        if (email_local)
             setOrder({ ...order, email: email_local })
     }, [])
 
@@ -70,21 +70,21 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             const t = (Number(order.value) * Number(props.info.feeP2p)) / 100
             const tt = t + Number(order.value)
             const fee = t * 100000000
-            order.fee = fee.toString()              
+            order.fee = fee.toString()
             setFeeP2P(fee.toString())
             setTotal(tt.toString())
         }
         props.getFee(order)
     }, [order])
     useEffect(() => {
-        let v = Number(props.feeNetwork) ==0
+        let v = Number(props.feeNetwork) == 0
         setIsHavebalance(v)
-    },[props.feeNetwork])
+    }, [props.feeNetwork])
 
     const handleAlertClose = () => {
         setAlert(false)
     }
-  
+
 
     const saveOrderHandler = () => {
         order.fee = feeP2P
@@ -124,9 +124,9 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             setAlert(true);
             return;
         }
-        sessionStorage.setItem("email",order.email)
+        sessionStorage.setItem("email", order.email)
         props.clickCreateOrder(order)
-        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "",price:"", value: "1000" })
+        setOrder({ ...order, erc20_address: "", btc_address: "", decimal: 0, info_payment: "", price: "", value: "1000" })
     }
     const setTypeAddress = (address: string) => {
         const key = getPair(order.pair)
@@ -140,19 +140,19 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             setOrder({ ...order, btc_address: address, erc20_address: "0x0000000000000000000000000000000000000000", decimal: key.DECIMAL })
         }
     }
-    function validateAddress(address:string, pair:string): void {        
-        let valid:string = validate_address(address,pair) || ""
-        if(valid){
+    function validateAddress(address: string, pair: string): void {
+        let valid: string = validate_address(address, pair) || ""
+        if (valid) {
             setErro(valid)
             setAlert(true)
             setInfoInvalid(true)
-        }else
+        } else
             setInfoInvalid(false)
-            
+
         console.log(isHavebalance || infoInvalid)
-        console.log("isHavebalance ",isHavebalance )
-        console.log("infoInvalid",infoInvalid)
-        console.log("valid",valid)
+        console.log("isHavebalance ", isHavebalance)
+        console.log("infoInvalid", infoInvalid)
+        console.log("valid", valid)
     }
 
     const getBooks = () => {
@@ -160,56 +160,58 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
             return (<></>)
 
         return (
+            <>
+                <div style={{ fontSize: 20, fontWeight: "bold" }}>Sales only for Lunes</div>
+                <Table >
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>ID</StyledTableCell>
+                            <StyledTableCell align="center">Pier</StyledTableCell>
+                            <StyledTableCell align="right">Price Unit</StyledTableCell>
+                            <StyledTableCell align="right">Price Total</StyledTableCell>
+                            <StyledTableCell align="right">Volume</StyledTableCell>
+                            <StyledTableCell align="right">Time Expire</StyledTableCell>
+                            <StyledTableCell align="right"></StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {props.books.map((row: any) => (
+                            <StyledTableRow key={row.id}>
+                                <StyledTableCell align="left">{row.id}</StyledTableCell>
+                                <StyledTableCell align="center">
+                                    {getPairLabel(row.pair)}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">{convertAmountLunes(row.price)}  {getPairType(row.pair)}</StyledTableCell>
+                                <StyledTableCell align="right">{getTotalPayment(row.price, row.value)}  {getPairType(row.pair)}</StyledTableCell>
+                                <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>
+                                <StyledTableCell align="right">
+                                    {<Timestamp date={convertTimestamp(row.dateExpire.toString())} />}
+                                </StyledTableCell>
+                                {
+                                    props.account?.address == row.owner ?
+                                        (
+                                            <StyledTableCell align="right">
+                                                <Button onClick={() => props.clickSelectCancel(row)}>CANCEL</Button>
+                                            </StyledTableCell>
+                                        )
+                                        :
+                                        (
+                                            <StyledTableCell align="right">
+                                                <Button onClick={() => props.clickSelectBuy(row)}>BUY</Button>
+                                            </StyledTableCell>
+                                        )
+                                }
 
 
-            <Table >
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>ID</StyledTableCell>
-                        <StyledTableCell align="center">Pier</StyledTableCell>
-                        <StyledTableCell align="right">Price Unit</StyledTableCell>
-                        <StyledTableCell align="right">Price Total</StyledTableCell>
-                        <StyledTableCell align="right">Volume</StyledTableCell>
-                        <StyledTableCell align="right">Time Expire</StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {props.books.map((row: any) => (
-                        <StyledTableRow key={row.id}>
-                            <StyledTableCell align="left">{row.id}</StyledTableCell>
-                            <StyledTableCell align="center">
-                                {getPairLabel(row.pair)}
-                            </StyledTableCell>
-                            <StyledTableCell align="right">{convertAmountLunes(row.price)}  {getPairType(row.pair)}</StyledTableCell>
-                            <StyledTableCell align="right">{getTotalPayment(row.price,row.value)}  {getPairType(row.pair)}</StyledTableCell>
-                            <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>
-                            <StyledTableCell align="right">
-                                {<Timestamp date={convertTimestamp(row.dateExpire.toString())} />}
-                            </StyledTableCell>
-                            {
-                                props.account?.address == row.owner?
-                                (
-                                    <StyledTableCell align="right">
-                                        <Button onClick={()=>props.clickSelectCancel(row)}>CANCEL</Button>
-                                    </StyledTableCell>
-                                )
-                                :
-                                (
-                                    <StyledTableCell align="right">
-                                        <Button onClick={()=>props.clickSelectBuy(row)}>BUY</Button>
-                                    </StyledTableCell>
-                                )
-                            }
-                          
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </>
 
-                        </StyledTableRow>
-                    ))}
-                </TableBody>
-            </Table>
         )
     }
-   
+
     return (
         <div>
             <Grid spacing={0} container
@@ -222,8 +224,8 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                     padding: 10,
                 }}>
                     <div className="boxInfoHeader" style={{ padding: 20, marginBottom: 50 }}>
-                        <div style={{fontSize:20, fontWeight:"bold"}}>Create sales order in LUNES only</div>
-                        <div>Your Balnace:{props.balance} LUNES</div>                        
+                        <div style={{ fontSize: 20, fontWeight: "bold" }}>Create sales order in LUNES only</div>
+                        <div>Your Balnace:{props.balance} LUNES</div>
                         <div>
                             <InputLabel>Select Account</InputLabel>
                             <Select
@@ -251,7 +253,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 ))}
                             </Select>
                         </div>
-                        <br/>
+                        <br />
 
                         <div>
                             <Autocomplete
@@ -265,7 +267,7 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                         </div>
                         <div>
                             <TextField
-                                label={order.pair?`Price unit in the pair ${order.pair}`:`Price unit`}
+                                label={order.pair ? `Price unit in the pair ${order.pair}` : `Price unit`}
                                 placeholder="0.00000"
                                 value={order.price}
                                 onChange={(e) => setOrder({ ...order, price: e.target.value })}
@@ -277,11 +279,11 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                         <div>
 
                             <TextField
-                                label={order.pair?`Address Payment valid`:`Address Payment valid for ${order.pair}`}
+                                label={order.pair ? `Address Payment valid` : `Address Payment valid for ${order.pair}`}
                                 fullWidth
                                 value={iserc20 ? order.erc20_address : order.btc_address}
                                 onChange={(e) => setTypeAddress(e.target.value)}
-                                onBlur={()=>validateAddress((iserc20 ? order.erc20_address : order.btc_address),order.pair)}
+                                onBlur={() => validateAddress((iserc20 ? order.erc20_address : order.btc_address), order.pair)}
                                 type={"text"}
                                 variant="filled"
                             />
@@ -298,15 +300,15 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                             />
                         </div>
                         <div>
-                        <TextField
-                            label={`email address for notification`}
-                            fullWidth
-                            value={order.email}
-                            onChange={(e) => setOrder({ ...order, email: e.target.value })}
-                            type={"email"}
+                            <TextField
+                                label={`email address for notification`}
+                                fullWidth
+                                value={order.email}
+                                onChange={(e) => setOrder({ ...order, email: e.target.value })}
+                                type={"email"}
 
-                            variant="filled"
-                                />
+                                variant="filled"
+                            />
                         </div>
                         <div>
                             <Autocomplete

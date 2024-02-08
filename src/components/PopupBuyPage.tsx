@@ -24,6 +24,7 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
     const [isConfirm, setIsConfirm] = React.useState(false)
     const [email, setEmail] = React.useState("")
     React.useEffect(()=>{
+        console.log(props.order)
         let email_local = sessionStorage.getItem("email")
         if(email_local)
             setEmail(email_local)
@@ -51,7 +52,7 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
         let a = Number(amount) * 100000000
         props.order.email = email;
         sessionStorage.setItem("email",email)
-        props.handleConfirm(props.order.id, a,email, props.order.sellOwner, amount, props.order.pair)
+        props.handleConfirm(props.order.id, a,email, props.order.email, amount, props.order.pair)
         props.handleClose()
     }
     return (

@@ -73,10 +73,11 @@ const ContractService = () => {
     if (!api || !apiReady) {
       return
     }
+   
     api.query.system.events((events:any) => {
       events.forEach((record:any) => {
-          const { event, phase } = record;
-          // Verificar se o evento é do seu contrato
+          const { event } = record;
+          
           console.log('phase detectado:', event.section );
           if (event.section === 'seuContrato' && event.method === 'SeuEvento') {
               console.log('Evento detectado:', event.data.toString());
@@ -92,7 +93,8 @@ const ContractService = () => {
           }
           
       });
-  });
+  })
+  
   }
   const loadingContract = async () =>{
     if(!is_ready){
