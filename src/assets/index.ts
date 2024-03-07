@@ -10,7 +10,7 @@ const pair_options = [
     { label: 'DOGECOIN ', type: 'DOGCOIN:DOGCOIN',DECIMAL:8,symbol:"DOGE",IS_FAMILE_BTC:false, ERC_20:false,UPLOADFILE:false,explorer:"https://live.blockcypher.com/doge/tx/",explorerTest:"https://live.blockcypher.com/doge-testnet/tx/" },
     { label: 'ETHEREUM', type: 'ETH:ETH',DECIMAL:18,symbol:"ETH",IS_FAMILE_BTC:false, ERC_20:true,UPLOADFILE:false,explorer:"https://etherscan.io/tx/",explorerTest:"https://goerli.etherscan.io/tx/" },    
     { label: 'SOLANA ', type: 'SOL:SOL',DECIMAL:18,symbol:"SOL",IS_FAMILE_BTC:false, ERC_20:false,UPLOADFILE:false,explorer:"https://explorer.solana.com/tx/",explorerTest:"https://explorer.solana.com/tx/" },
-    { label: 'GMC/BNB ', type: 'GMC:BNB',DECIMAL:18,symbol:"DOGE",IS_FAMILE_BTC:false, ERC_20:true,UPLOADFILE:false,explorer:"https://bscscan.com/tx/",explorerTest:"https://testnet.bscscan.com/tx/" },
+    { label: 'GMC/BNB ', type: 'GMC:BNB',DECIMAL:18,symbol:"GMC",IS_FAMILE_BTC:false, ERC_20:true,UPLOADFILE:false,explorer:"https://bscscan.com/tx/",explorerTest:"https://testnet.bscscan.com/tx/" },
 ];
 
 const values_type =[
