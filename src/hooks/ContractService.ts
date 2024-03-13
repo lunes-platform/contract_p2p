@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import {calc_fee, convertAmountLunes, type_amount_lunes} from "../utils/convert"
+import {calc_fee, convertAmountLunes, getPair, type_amount_lunes} from "../utils/convert"
 import { ApiContext } from '../context/ApiContext'
 import {
   web3Enable,
@@ -360,7 +360,8 @@ const ContractService = () => {
       return
     }
     try {
-      const price = Number(price_) * 10000000000
+      const pair_ = getPair(pair)
+      const price = Number(price_) * Number(pair_?.DECIMAL)
       const gasLimit: any = getGasLimit(api)
       //Estimativa do gas 
       const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::createOrder'](
@@ -419,7 +420,8 @@ const ContractService = () => {
       return
     }
 
-    const price = Number(price_) * 10000000000
+    const pair_ = getPair(pair)
+    const price = Number(price_) * Number(pair_?.DECIMAL)
     setLoading(true)
     const gasLimit: any = getGasLimit(api)
     try {
