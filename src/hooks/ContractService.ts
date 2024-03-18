@@ -361,8 +361,10 @@ const ContractService = () => {
     }
     try {
       const pair_ = getPair(pair)
-      const price = Number(price_) * Number(pair_?.DECIMAL)
+      
+      const price = Number(price_) * Math.pow(10, Number(pair_?.DECIMAL))
       const gasLimit: any = getGasLimit(api)
+      console.log( "Total",price.toString())
       //Estimativa do gas 
       const { storageDeposit, result }: any = await contract.query['p2pLunesImpl::createOrder'](
         account.address,
@@ -371,7 +373,7 @@ const ContractService = () => {
           storageDepositLimit: null,
           value: (new BN(amount)).mul(decimals)
         },
-        price.toString(),
+        price,
         fee,
         pair,
         erc20Address,
@@ -421,7 +423,7 @@ const ContractService = () => {
     }
 
     const pair_ = getPair(pair)
-    const price = Number(price_) * Number(pair_?.DECIMAL)
+    const price = Number(price_) * Math.pow(10, Number(pair_?.DECIMAL))
     setLoading(true)
     const gasLimit: any = getGasLimit(api)
     try {
