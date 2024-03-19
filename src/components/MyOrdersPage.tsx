@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import { convertAmountLunes, convertTimestamp, getPairLabel, getPairType, getTotalPayment } from "../utils/convert";
+import { convertAmountCoin, convertAmountLunes, convertTimestamp, getPairLabel, getPairType, getTotalPayment } from "../utils/convert";
 import Timestamp from "react-timestamp";
 const StyledTableCell: any = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -104,9 +104,9 @@ const MyOrdersPage = ({ ...props }: BookTradeProps) => {
                             <StyledTableCell align="center">
                                 {getPairLabel(row.pair)}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{convertAmountLunes(row.price)}</StyledTableCell>
+                            <StyledTableCell align="right">{convertAmountCoin(row.price,row.pair)}</StyledTableCell>
                             <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>
-                            <StyledTableCell align="right">{getTotalPayment(row.price, row.value)}  {getPairType(row.pair)}</StyledTableCell>
+                            <StyledTableCell align="right">{getTotalPayment(row.price, row.value,row.pair)}  {getPairType(row.pair)}</StyledTableCell>
                             <StyledTableCell align="right">
                                 {<Timestamp date={convertTimestamp(row.dateExpire.toString())} />}
                             </StyledTableCell>

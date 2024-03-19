@@ -60,7 +60,7 @@ const PopupOpenConflit = ({ ...props }: PopupProps) => {
                 
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
-                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)}</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value,props.order.pair)}  {getPairType(props.order.pair)}</div>
                 <div>Fee OTC: {props.info.feeP2p}%</div>
                 <br/>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Attention</div>

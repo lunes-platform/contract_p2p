@@ -373,7 +373,7 @@ const ContractService = () => {
           storageDepositLimit: null,
           value: (new BN(amount)).mul(decimals)
         },
-        price,
+        price.toString(),
         fee,
         pair,
         erc20Address,

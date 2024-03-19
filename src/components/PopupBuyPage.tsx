@@ -116,7 +116,7 @@ const PopupBuyPage = ({ ...props }: PopupProps) => {
                 </div>
                 <div>Volume: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
-                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)}</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value,props.order.pair)}  {getPairType(props.order.pair)}</div>
                 <div>Date expire to deposit:   {<Timestamp date={convertTimestamp(props.order.dateExpire)} />}</div>
                 <div style={{ color: "red" }}>Attention: Negotiations not completed result in a fine, confirm?</div>
             </DialogContent>

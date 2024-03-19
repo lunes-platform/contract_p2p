@@ -54,7 +54,7 @@ const PopupConflitApprovPaymentPage = ({ ...props }: PopupProps) => {
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold", margin:15}}>{props.order.btcAddress?props.order.btcAddress:props.order.erc20Address}</div>
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
-                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)}</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value,props.order.pair)}  {getPairType(props.order.pair)}</div>
                 <br/>
                 <div style={{background:"#DAE2ED"}}>{props.order.info_payment}</div>
                 <br/>

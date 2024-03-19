@@ -46,8 +46,15 @@ const convertAmountLunes = (value: string) => {
         return 0
     return Number(value.replaceAll(",", "").toString()) / 100000000
 }
-const getTotalPayment = (price:string, amount:string) =>{
-    let price_ = convertAmountLunes(price)
+const convertAmountCoin = (value: string, pair:string) => {
+    if(!value)
+        return 0
+    let pair_ = getPair(pair)
+    return (Number(value.replaceAll(",", "").toString()) / Math.pow(10, Number(pair_?.DECIMAL)))
+}
+
+const getTotalPayment = (price:string, amount:string, pair:string) =>{
+    let price_ = convertAmountCoin(price,pair)
     let amount_ = convertAmountLunes(amount)
     let tt = price_ * amount_
     
@@ -70,4 +77,4 @@ const validate_address = (address:string, pair:string) =>{
         return null;
 }
 
-export {calc_fee, type_amount_lunes, getPair,getAmont, convertTimestamp,convertAmountLunes,getTotalPayment,getPairLabel,getPairType,validate_address}
+export {calc_fee, type_amount_lunes, getPair,getAmont, convertTimestamp,convertAmountLunes,getTotalPayment,getPairLabel,getPairType,validate_address,convertAmountCoin}

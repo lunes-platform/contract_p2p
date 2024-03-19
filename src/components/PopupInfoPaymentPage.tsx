@@ -48,7 +48,7 @@ const PopupInfoPaymentPage = ({ ...props }: PopupProps) => {
                 </div>
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
-                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)} to payment</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value,props.order.pair)}  {getPairType(props.order.pair)} to payment</div>
                 <br/>
                 <div style={{background:"#DAE2ED"}}>{props.order.infoPayment}</div>
                 <br/>

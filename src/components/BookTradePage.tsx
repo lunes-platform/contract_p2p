@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import Order from "../models/Order";
 import Timestamp from "react-timestamp";
 import Identicon from "@polkadot/react-identicon";
-import { convertAmountLunes, convertTimestamp, getAmont, getPair, getPairLabel, getPairType, getTotalPayment, validate_address } from "../utils/convert";
+import { convertAmountCoin, convertAmountLunes, convertTimestamp, getAmont, getPair, getPairLabel, getPairType, getTotalPayment, validate_address } from "../utils/convert";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -181,8 +181,8 @@ const BookTradePage = ({ ...props }: BookTradeProps) => {
                                 <StyledTableCell align="center">
                                     {getPairLabel(row.pair)}
                                 </StyledTableCell>
-                                <StyledTableCell align="right">{convertAmountLunes(row.price)}  {getPairType(row.pair)}</StyledTableCell>
-                                <StyledTableCell align="right">{getTotalPayment(row.price, row.value)}  {getPairType(row.pair)}</StyledTableCell>
+                                <StyledTableCell align="right">{convertAmountCoin(row.price,row.pair)}  {getPairType(row.pair)}</StyledTableCell>
+                                <StyledTableCell align="right">{getTotalPayment(row.price, row.value, row.pair)}  {getPairType(row.pair)}</StyledTableCell>
                                 <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>
                                 <StyledTableCell align="right">
                                     {<Timestamp date={convertTimestamp(row.dateExpire.toString())} />}

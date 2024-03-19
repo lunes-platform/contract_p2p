@@ -39,7 +39,7 @@ const PopupOpenConfirm = ({ ...props }: PopupProps) => {
                 
                 <div>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {props.order.pair}</div>
-                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {props.order.pair}</div>          
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value, props.order.pair)}  {props.order.pair}</div>          
                 <br/>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Attention</div>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Your Confirm Pyament</div>

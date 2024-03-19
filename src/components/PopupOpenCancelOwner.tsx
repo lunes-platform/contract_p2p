@@ -39,7 +39,7 @@ const PopupOpenCancelOwner = ({ ...props }: PopupProps) => {
                 
                 <div style={{fontSize:18, fontWeight:"bold"}}>Amount: {convertAmountLunes(props.order.value)} LUNES</div>
                 <div>Price Uni: {convertAmountLunes(props.order.price)}  {getPairLabel(props.order.pair)}</div>
-                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value)}  {getPairType(props.order.pair)}</div>
+                <div style={{fontSize:18, fontWeight:"bold"}} >Total:  {getTotalPayment(props.order.price,props.order.value,props.order.pair)}  {getPairType(props.order.pair)}</div>
                 <br/>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Attention</div>
                 <div style={{textAlign:"center", fontSize:18, fontWeight:"bold"}}>Do you confirm?</div>
