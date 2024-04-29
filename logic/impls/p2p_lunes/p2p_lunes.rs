@@ -1,3 +1,4 @@
+#![warn(clippy::arithmetic_side_effects)]
 use crate::impls::p2p_lunes::data::{ BuyBook, Data, InfoContract, LunesError, OrdemBook };
 use ink_prelude::vec::Vec;
 use openbrush::contracts::{
@@ -129,7 +130,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
             email: email,
             sell_email:email_sall
         });
-        if self.data::<Data>().books[index.unwrap()].value <= 0 {
+        if self.data::<Data>().books[index.unwrap()].value <= (0 as u128) {
             self.data::<Data>().books.remove(index.unwrap());
         }
         self.data::<Data>().next_buy_id += 1;
@@ -342,12 +343,11 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         if page == 0 {
             return Err(PSP22Error::Custom(LunesError::InvalidPage.as_str()));
         }
-        let date_block = Self::env().block_timestamp();
         let mut _all: Vec<OrdemBook> = Vec::new();
         _all = self
             .data::<Data>()
             .books.iter()
-            .filter(|book| book.cencel == false && book.date_expire > date_block)
+            .filter(|book| book.cencel == false)
             .cloned()
             .rev()
             .skip(((page - 1) * (100 as u64)).try_into().unwrap())
@@ -436,7 +436,7 @@ pub trait P2pLunesImpl: Storage<Data> + Storage<reentrancy_guard::Data> + Storag
         {
             Ok(bookby.clone())
         } else {
-            return Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()));
+            Err(PSP22Error::Custom(LunesError::NoBuyBook.as_str()))
         }
     }
     ///Best price
