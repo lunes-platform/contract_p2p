@@ -89,7 +89,6 @@ const MyOrdersPage = ({ ...props }: BookTradeProps) => {
                         <StyledTableCell align="right">Price Uni.</StyledTableCell>
                         <StyledTableCell align="right">reserved Amount</StyledTableCell>
                         <StyledTableCell align="right">Payment Amount</StyledTableCell>
-                        <StyledTableCell align="right">Time Expire payment</StyledTableCell>
                         <StyledTableCell align="center">Info Deposit</StyledTableCell>
                         <StyledTableCell align="right"></StyledTableCell>
 
@@ -106,10 +105,7 @@ const MyOrdersPage = ({ ...props }: BookTradeProps) => {
                             </StyledTableCell>
                             <StyledTableCell align="right">{convertAmountCoin(row.price,row.pair)}</StyledTableCell>
                             <StyledTableCell align="right">{convertAmountLunes(row.value)} LUNES</StyledTableCell>
-                            <StyledTableCell align="right">{getTotalPayment(row.price, row.value,row.pair)}  {getPairType(row.pair)}</StyledTableCell>
-                            <StyledTableCell align="right">
-                                {<Timestamp date={convertTimestamp(row.dateExpire.toString())} />}
-                            </StyledTableCell>
+                            <StyledTableCell align="right">{getTotalPayment(row.price, row.value,row.pair)}  {getPairType(row.pair)}</StyledTableCell>                           
                             <StyledTableCell align="center">
                                 <Button onClick={() => props.clickSelectInfo(row)}>
                                     <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>

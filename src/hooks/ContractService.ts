@@ -150,13 +150,11 @@ const ContractService = () => {
       return false
     }
     const address: string = event.target.value
-    const account = accounts.find(account => account.address === address)
+    const account = accounts.find((account:any) => account.address === address)
     if (account) {
       setAccount(account)
-
       const injected = await web3FromSource(account.meta.source)
       api.setSigner(injected.signer)
-      conectcontract()
     }
   }
   //Info contract

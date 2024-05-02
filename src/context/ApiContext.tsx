@@ -15,7 +15,7 @@ export interface ApiContextProviderProps {
 	children?: React.ReactElement;
 }
 
-const WS_PROVIDER = process.env.REACT_APP_WS_PROVIDER || 'wss://ws-test.lunes.io';
+const WS_PROVIDER:any = (process.env.REACT_APP_WS_PROVIDER?.toString().split(",")) || ['wss://ws-test.lunes.io'];
 
 export function ApiContextProvider(
 	props: ApiContextProviderProps
